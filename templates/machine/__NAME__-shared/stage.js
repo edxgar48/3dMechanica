@@ -6,7 +6,7 @@ import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {buildMachine} from './machine.js';
 
-export const BG = '#eceef0';
+export const BG = '#14171c';
 
 export function createStage({canvas}) {
   const renderer = new THREE.WebGLRenderer({canvas, antialias: false, preserveDrawingBuffer: true, powerPreference: 'high-performance'});
@@ -43,13 +43,13 @@ export function createStage({canvas}) {
   Object.assign(sun.shadow.camera, {left: -0.3, right: 0.3, top: 0.3, bottom: -0.3, near: 0.2, far: 4});
   sun.shadow.mapSize.set(2048, 2048);
   sun.shadow.bias = -0.0004;
-  scene.add(sun, sun.target, new THREE.HemisphereLight('#ffffff', '#cfd0d3', 0.8));
+  scene.add(sun, sun.target, new THREE.HemisphereLight('#ffffff', '#3a3e45', 0.8));
 
   // a shadow catcher just under the crank; polygonOffset keeps its depth test inside the composer's target
   const FLOOR_Y = -0.05;
   const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(4, 4),
-    new THREE.ShadowMaterial({color: '#5d636c', opacity: 0.25, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8}),
+    new THREE.ShadowMaterial({color: '#000000', opacity: 0.55, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8}),
   );
   floor.rotation.x = -Math.PI / 2;
   floor.position.y = FLOOR_Y;

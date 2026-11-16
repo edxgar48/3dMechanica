@@ -14,7 +14,7 @@ import * as THREE from 'three';
 // review sheets all read: change a time there and everything follows.
 export const SCRIPT = TIMELINE.script;
 export const DURATION = TIMELINE.duration;
-export const DEFAULTS = {duration: DURATION, fps: 60, theme: 'light', hud: {enabled: false, title: 'cessna', subtitle: ''}, director: {enabled: false}, watermark: ''};
+export const DEFAULTS = {duration: DURATION, fps: 60, theme: 'dark', hud: {enabled: false, title: 'cessna', subtitle: ''}, director: {enabled: false}, watermark: ''};
 const D2R = Math.PI / 180;
 const smoother = (x) => {
   const u = Math.min(1, Math.max(0, x));

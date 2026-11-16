@@ -9,7 +9,7 @@ import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {buildEngine} from './engine.js';
 
 const V3 = THREE.Vector3;
-export const BG = {top: '#f3f3f4', mid: '#e9eaec', low: '#e3e4e6'};
+export const BG = {top: '#1d2127', mid: '#15181d', low: '#0e1013'};
 
 // look (every field optional, the film's stage when absent): ao, the GTAO blend (0.75); shadow, 'soft' (VSM, a wide
 // blur) or 'hard' (PCF, a crisp edge); studio, 'full' (four soft boxes) or 'plain' (the top box alone, a flatter read
@@ -106,13 +106,13 @@ export function createV8Stage({canvas, look = {}}) {
   sun.shadow.bias = -0.0004;
   sun.shadow.normalBias = 0.002;
   scene.add(sun, sun.target);
-  scene.add(new THREE.HemisphereLight('#ffffff', '#cfd0d3', lo ? 2.2 : 0.7));
+  scene.add(new THREE.HemisphereLight('#ffffff', '#3a3e45', lo ? 2.2 : 0.7));
 
   // the floor: shadow only, on a plane just under the pan
   const FLOOR_Y = -0.14;
   const shade = new THREE.Mesh(
     new THREE.PlaneGeometry(20, 20),
-    new THREE.ShadowMaterial({color: '#5d636c', opacity: 0.28, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8}),
+    new THREE.ShadowMaterial({color: '#000000', opacity: 0.55, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8}),
   );
   shade.rotation.x = -Math.PI / 2;
   shade.position.y = FLOOR_Y;

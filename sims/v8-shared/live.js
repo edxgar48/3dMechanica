@@ -25,7 +25,7 @@ const PLAYS = [1 / 60, 1 / 40, 1 / 20, 1 / 10, 1 / 5, 1 / 2, 1];
 const playText = (p) => (p >= 1 ? '1× SPEED' : `1 / ${Math.round(1 / p)} SPEED`);
 
 const CSS = (top) => `
-html,body{background:#ecedef;overflow:hidden}
+html,body{background:#0f1115;overflow:hidden}
 #app{position:absolute!important;inset:auto!important;left:0;top:0;width:${W}px;height:${H}px;transform-origin:0 0}
 #gl{touch-action:none;cursor:grab}
 #gl.drag{cursor:grabbing}
@@ -33,8 +33,8 @@ html,body{background:#ecedef;overflow:hidden}
 .tb:hover{filter:brightness(.95)}
 .hit{position:absolute;pointer-events:auto;cursor:pointer}
 .hit.ew{cursor:ew-resize}
-.tourchip{position:absolute;left:800px;top:62px;transform:translateX(-50%);display:flex;align-items:center;gap:7px;height:21px;padding:0 11px;border:1px solid #e1e3e6;background:rgba(255,255,255,.95);color:#16181b;font:600 8.8px Inter,sans-serif;letter-spacing:1.3px;white-space:nowrap;cursor:pointer;pointer-events:auto}
-.tourchip i{display:block;width:6px;height:6px;border-radius:50%;background:#d6182b}
+.tourchip{position:absolute;left:800px;top:62px;transform:translateX(-50%);display:flex;align-items:center;gap:7px;height:21px;padding:0 11px;border:1px solid #2b3037;background:rgba(21,24,29,.92);color:#e7e9ec;font:600 8.8px Inter,sans-serif;letter-spacing:1.3px;white-space:nowrap;cursor:pointer;pointer-events:auto}
+.tourchip i{display:block;width:6px;height:6px;border-radius:50%;background:#ff3d55}
 .tourchip.on i{animation:blink 1.2s steps(2) infinite}
 @keyframes blink{50%{opacity:.15}}
 .turn{position:fixed;left:0;right:0;bottom:18px;text-align:center;font:600 12px/1.4 'JetBrains Mono',monospace;letter-spacing:1px;color:#8b8f95;text-transform:uppercase;display:none}

@@ -4,7 +4,8 @@
 // contact chart the real stance of all 20 feet, the crank dial the real throws), so a captured frame depends only on t.
 import {HOLY, PATH} from './jansen.js';
 
-export const C = {ink: '#2f2a22', mute: '#8a7f6c', faint: '#b9ae99', line: 'rgba(110,98,78,.55)', paper: 'rgba(243,238,227,.88)', accent: '#d0592a', red: '#c9342a', dark: '#3a342b'};
+// dark theme: dark is the strong ink (now light), the cream fills are now near-black
+export const C = {ink: '#ece4d6', mute: '#9c917f', faint: '#4f473b', line: 'rgba(190,175,150,.35)', paper: 'rgba(24,21,17,.88)', accent: '#ff7a3a', red: '#ff4a3a', dark: '#e6ddcd'};
 export const VIEW_KEYS = ['cine', 'leg', 'front', 'side', 'top'];
 export const TOGGLES = ['iso', 'trace'];
 // the order the hero leg's labels appear in, and what each one is
@@ -33,13 +34,13 @@ const CSS = `
 .lb{font-size:8px;font-weight:600;letter-spacing:1.3px;color:${C.mute};text-transform:uppercase;white-space:nowrap}
 .vl{font-size:10.5px;font-weight:600;letter-spacing:.4px;white-space:nowrap}
 .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
-.vb{position:absolute;height:19px;padding:0 9px;display:flex;align-items:center;font-size:8.5px;font-weight:700;letter-spacing:1.4px;border:1px solid ${C.line};background:rgba(243,238,227,.9);color:${C.dark}}
-.call{position:absolute;white-space:nowrap;background:rgba(243,238,227,.86);border:1px solid ${C.line};padding:4px 7px 4px}
+.vb{position:absolute;height:19px;padding:0 9px;display:flex;align-items:center;font-size:8.5px;font-weight:700;letter-spacing:1.4px;border:1px solid ${C.line};background:rgba(24,21,17,.9);color:${C.dark}}
+.call{position:absolute;white-space:nowrap;background:rgba(24,21,17,.86);border:1px solid ${C.line};padding:4px 7px 4px}
 .call b{display:block;font-size:8.5px;font-weight:700;letter-spacing:1.4px}
 .call span{display:block;font-size:7.5px;letter-spacing:1.1px;color:${C.mute};margin-top:2px}
 .tag{position:absolute;display:flex;align-items:center;gap:5px;white-space:nowrap;transform:translate(-50%,-50%)}
-.tag b{width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font:700 10px 'JetBrains Mono',monospace;color:#f6f1e6;background:${C.dark};box-shadow:0 0 0 1.5px rgba(246,241,230,.9)}
-.tag span{font:600 8.5px 'JetBrains Mono',monospace;color:${C.dark};background:rgba(243,238,227,.86);padding:1px 4px;border:1px solid ${C.line}}
+.tag b{width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font:700 10px 'JetBrains Mono',monospace;color:#1a1713;background:${C.dark};box-shadow:0 0 0 1.5px rgba(20,18,15,.9)}
+.tag span{font:600 8.5px 'JetBrains Mono',monospace;color:${C.dark};background:rgba(24,21,17,.86);padding:1px 4px;border:1px solid ${C.line}}
 .cur{position:absolute;left:0;top:0;z-index:50;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
 .ring{position:absolute;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:1.6px solid ${C.accent};opacity:0;z-index:49}
 `;
@@ -114,7 +115,7 @@ export function createConsole(app) {
     rows[k] = add(`<div style="position:absolute;left:${HN.x + 12}px;top:${y}px;width:${HN.w - 24}px;height:19px;display:flex;align-items:center;gap:9px">
       <span class="mono" data-r="dot" style="width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font-size:9.5px;font-weight:700;border:1px solid ${C.line}">${k}</span>
       <span class="mono" data-r="val" style="font-size:11px;font-weight:600;width:38px;text-align:right">${HOLY[k].toFixed(1)}</span>
-      <span style="flex:1;height:5px;background:rgba(110,98,78,.14);position:relative"><span data-r="bar" style="position:absolute;left:0;top:0;bottom:0;width:${((HOLY[k] / 66) * 100).toFixed(1)}%;background:${C.faint}"></span></span></div>`);
+      <span style="flex:1;height:5px;background:rgba(190,175,150,.14);position:relative"><span data-r="bar" style="position:absolute;left:0;top:0;bottom:0;width:${((HOLY[k] / 66) * 100).toFixed(1)}%;background:${C.faint}"></span></span></div>`);
   });
   add(`<div style="position:absolute;left:${HN.x + 12}px;top:${HN.y + 46 + 11 * 21 + 1}px;width:${HN.w - 24}px;height:0;border-top:1px dashed ${C.line}"></div>`);
   add(`<div class="lb" style="position:absolute;left:${HN.x + 12}px;top:${HN.y + HN.h - 18}px;font-size:7px">l, m · THE CRANK AND ITS AXLE OFFSET</div>`);
@@ -137,9 +138,9 @@ export function createConsole(app) {
   const SL = {x: WP.x + 16, y: WP.y + 54, w: WP.w - 32};
   add(`<div class="lb" style="position:absolute;left:${SL.x}px;top:${SL.y - 18}px">WIND SPEED</div>`);
   const windVal = add(`<div class="vl mono" style="position:absolute;right:${1600 - (SL.x + SL.w)}px;top:${SL.y - 20}px;color:${C.accent}"></div>`);
-  add(`<div style="position:absolute;left:${SL.x}px;top:${SL.y}px;width:${SL.w}px;height:3px;background:rgba(110,98,78,.22)"></div>`);
+  add(`<div style="position:absolute;left:${SL.x}px;top:${SL.y}px;width:${SL.w}px;height:3px;background:rgba(190,175,150,.22)"></div>`);
   const fill = add(`<div style="position:absolute;left:${SL.x}px;top:${SL.y}px;height:3px;background:${C.accent}"></div>`);
-  const knob = add(`<div style="position:absolute;top:${SL.y - 6.5}px;width:15px;height:15px;margin-left:-7.5px;border-radius:50%;background:#f6f1e6;border:1.6px solid ${C.dark}"></div>`);
+  const knob = add(`<div style="position:absolute;top:${SL.y - 6.5}px;width:15px;height:15px;margin-left:-7.5px;border-radius:50%;background:#1a1713;border:1.6px solid ${C.dark}"></div>`);
   add(`<svg style="position:absolute;left:${SL.x}px;top:${SL.y + 8}px" width="${SL.w}" height="14">${[0, 4, 8, 12, 16].map((v) => `<line x1="${(v / WIND_MAX) * SL.w}" x2="${(v / WIND_MAX) * SL.w}" y1="0" y2="4" stroke="${C.dark}" stroke-width=".8"/><text x="${Math.min(SL.w - 8, Math.max(4, (v / WIND_MAX) * SL.w))}" y="12" font-size="6.5" text-anchor="middle" fill="${C.mute}">${v}${v === 16 ? ' m/s' : ''}</text>`).join('')}</svg>`);
   const windHist = add(`<svg style="position:absolute;left:${SL.x}px;top:${SL.y + 34}px" width="${SL.w}" height="58"></svg>`);
   add(`<div style="position:absolute;left:${SL.x}px;top:${SL.y + 102}px;width:${SL.w}px;display:grid;grid-template-columns:1fr auto;row-gap:5px">
@@ -177,7 +178,7 @@ export function createConsole(app) {
   const callSvg = add(`<svg data-callouts style="position:absolute;inset:0;overflow:visible" width="1600" height="900"></svg>`);
   const tags = add(`<div data-callouts style="position:absolute;inset:0"></div>`);
   const ring = add(`<div class="ring"></div>`);
-  const cur = add(`<div class="cur"><svg width="24" height="24" viewBox="0 0 34 34"><path d="M4 3 L30 13.5 L17.5 17.5 L13.5 30 Z" fill="#1d1a16" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/></svg></div>`);
+  const cur = add(`<div class="cur"><svg width="24" height="24" viewBox="0 0 34 34"><path d="M4 3 L30 13.5 L17.5 17.5 L13.5 30 Z" fill="#f2f3f5" stroke="#0d0f12" stroke-width="2.2" stroke-linejoin="round"/></svg></div>`);
 
   const K = {};
   for (const n of ui.querySelectorAll('[data-k]')) K[n.dataset.k] = n;
@@ -237,7 +238,7 @@ export function createConsole(app) {
         const dot = r.querySelector('[data-r=dot]');
         const bar = r.querySelector('[data-r=bar]');
         dot.style.background = st === 2 ? C.accent : st === 1 ? C.dark : 'transparent';
-        dot.style.color = st ? '#f6f1e6' : C.dark;
+        dot.style.color = st ? '#1a1713' : C.dark;
         dot.style.borderColor = st ? 'transparent' : C.line;
         bar.style.background = st === 2 ? C.accent : st === 1 ? C.dark : C.faint;
         r.querySelector('[data-r=val]').style.color = st === 2 ? C.accent : C.ink;
@@ -258,7 +259,7 @@ export function createConsole(app) {
           const lit = s.rows[k] === 2;
           h += `<line x1="${LX(J[a][0]).toFixed(1)}" y1="${LY(J[a][1]).toFixed(1)}" x2="${LX(J[b][0]).toFixed(1)}" y2="${LY(J[b][1]).toFixed(1)}" stroke="${lit ? C.accent : k === 'm' ? C.dark : C.ink}" stroke-width="${lit ? 3 : k === 'm' ? 2.6 : 2}" stroke-linecap="round"/>`;
         }
-        for (const k of ['O', 'P', 'A', 'B', 'C', 'D', 'E']) h += `<circle cx="${LX(J[k][0]).toFixed(1)}" cy="${LY(J[k][1]).toFixed(1)}" r="${k === 'O' || k === 'P' ? 3.6 : 2.8}" fill="${k === 'O' || k === 'P' ? C.dark : '#f3eee3'}" stroke="${C.red}" stroke-width="1.4"/>`;
+        for (const k of ['O', 'P', 'A', 'B', 'C', 'D', 'E']) h += `<circle cx="${LX(J[k][0]).toFixed(1)}" cy="${LY(J[k][1]).toFixed(1)}" r="${k === 'O' || k === 'P' ? 3.6 : 2.8}" fill="${k === 'O' || k === 'P' ? C.dark : '#1a1713'}" stroke="${C.red}" stroke-width="1.4"/>`;
         h += `<path d="M${LX(-8)} ${LY(-3)} l-6 6 h12z" fill="none" stroke="${C.dark}" stroke-width=".8"/><path d="M${LX(-38) - 6} ${LY(-7.8) + 9} h12" stroke="${C.dark}" stroke-width=".8"/>`;
         h += `<ellipse cx="${LX(J.F[0]).toFixed(1)}" cy="${(LY(J.F[1]) + 2).toFixed(1)}" rx="6" ry="3" fill="${C.dark}"/>`;
         h += `<circle cx="${LX(J.F[0]).toFixed(1)}" cy="${LY(J.F[1]).toFixed(1)}" r="4.5" fill="none" stroke="${C.accent}" stroke-width="1.6"/>`;
@@ -266,7 +267,7 @@ export function createConsole(app) {
           const mx = (LX(J[a][0]) + LX(J[b][0])) / 2;
           const my = (LY(J[a][1]) + LY(J[b][1])) / 2;
           const lit = s.rows[k] === 2;
-          h += `<circle cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" r="5.6" fill="${lit ? C.accent : '#f3eee3'}" stroke="${lit ? C.accent : C.line}" stroke-width=".8"/><text x="${mx.toFixed(1)}" y="${(my + 2.6).toFixed(1)}" font-size="7.5" font-weight="700" text-anchor="middle" fill="${lit ? '#f6f1e6' : C.dark}" font-family="JetBrains Mono">${k}</text>`;
+          h += `<circle cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" r="5.6" fill="${lit ? C.accent : '#1a1713'}" stroke="${lit ? C.accent : C.line}" stroke-width=".8"/><text x="${mx.toFixed(1)}" y="${(my + 2.6).toFixed(1)}" font-size="7.5" font-weight="700" text-anchor="middle" fill="${lit ? '#1a1713' : C.dark}" font-family="JetBrains Mono">${k}</text>`;
         }
         h += `<text x="244" y="${LY(-91.83) - 6}" font-size="6.5" text-anchor="end" fill="${C.mute}">WALK →</text>`;
         link.innerHTML = h;
@@ -283,7 +284,7 @@ export function createConsole(app) {
         const W = SL.w;
         let p = '';
         s.windHist.forEach((w, i) => (p += `${i ? 'L' : 'M'}${((i / (s.windHist.length - 1)) * W).toFixed(1)} ${(54 - (w / WIND_MAX) * 50).toFixed(1)}`));
-        windHist.innerHTML = `<rect x="0" y="0" width="${W}" height="56" fill="rgba(110,98,78,.06)"/>${[4, 8, 12].map((v) => `<line x1="0" x2="${W}" y1="${54 - (v / WIND_MAX) * 50}" y2="${54 - (v / WIND_MAX) * 50}" stroke="${C.faint}" stroke-width=".5" stroke-dasharray="2 3"/>`).join('')}<path d="${p} L${W} 56 L0 56 Z" fill="rgba(208,89,42,.12)"/><path d="${p}" fill="none" stroke="${C.accent}" stroke-width="1.4"/><text x="2" y="9" font-size="6.5" fill="${C.mute}">LAST 12 S</text>`;
+        windHist.innerHTML = `<rect x="0" y="0" width="${W}" height="56" fill="rgba(190,175,150,.06)"/>${[4, 8, 12].map((v) => `<line x1="0" x2="${W}" y1="${54 - (v / WIND_MAX) * 50}" y2="${54 - (v / WIND_MAX) * 50}" stroke="${C.faint}" stroke-width=".5" stroke-dasharray="2 3"/>`).join('')}<path d="${p} L${W} 56 L0 56 Z" fill="rgba(255,122,58,.14)"/><path d="${p}" fill="none" stroke="${C.accent}" stroke-width="1.4"/><text x="2" y="9" font-size="6.5" fill="${C.mute}">LAST 12 S</text>`;
       }
 
       // contact chart: a row per leg, ink where the foot is on the sand; the wave runs down the rows
@@ -316,7 +317,7 @@ export function createConsole(app) {
           const x = cx + Math.cos(-a) * 38;
           const y = cy + Math.sin(-a) * 38;
           const lit = i === 0;
-          h += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${lit ? C.accent : C.dark}" stroke-width="${lit ? 2.2 : 1.1}" opacity="${lit ? 1 : 0.55}"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${lit ? 6.5 : 5.5}" fill="${lit ? C.accent : '#f3eee3'}" stroke="${lit ? C.accent : C.dark}" stroke-width=".8"/><text x="${x.toFixed(1)}" y="${(y + 2.3).toFixed(1)}" font-size="6.2" font-weight="700" text-anchor="middle" fill="${lit ? '#f6f1e6' : C.dark}" font-family="JetBrains Mono">${i + 1}</text>`;
+          h += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${lit ? C.accent : C.dark}" stroke-width="${lit ? 2.2 : 1.1}" opacity="${lit ? 1 : 0.55}"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${lit ? 6.5 : 5.5}" fill="${lit ? C.accent : '#1a1713'}" stroke="${lit ? C.accent : C.dark}" stroke-width=".8"/><text x="${x.toFixed(1)}" y="${(y + 2.3).toFixed(1)}" font-size="6.2" font-weight="700" text-anchor="middle" fill="${lit ? '#1a1713' : C.dark}" font-family="JetBrains Mono">${i + 1}</text>`;
         });
         crank.innerHTML = h;
       }
@@ -335,13 +336,13 @@ export function createConsole(app) {
       // views and toggles
       for (const k of VIEW_KEYS) {
         const v = s.viewOn[k] || 0;
-        btn[k].style.background = v > 0.5 ? C.dark : 'rgba(243,238,227,.9)';
-        btn[k].style.color = v > 0.5 ? '#f3eee3' : C.dark;
+        btn[k].style.background = v > 0.5 ? C.dark : 'rgba(24,21,17,.9)';
+        btn[k].style.color = v > 0.5 ? '#1a1713' : C.dark;
       }
       for (const k of TOGGLES) {
         const on = s[k] > 0.5;
-        btn[k].style.background = on ? C.accent : 'rgba(243,238,227,.9)';
-        btn[k].style.color = on ? '#f6f1e6' : C.dark;
+        btn[k].style.background = on ? C.accent : 'rgba(24,21,17,.9)';
+        btn[k].style.color = on ? '#1a1713' : C.dark;
         btn[k].style.borderColor = on ? C.accent : C.line;
       }
 

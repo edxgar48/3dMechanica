@@ -10,7 +10,7 @@ import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {buildGear, GROUND} from './gear.js';
 
 const V3 = THREE.Vector3;
-export const COL = {bg: '#f2e6d2', ground: '#efe0c6', mark: '#d6bf9a', shadow: '#7a5a3a'};
+export const COL = {bg: '#1a1713', ground: '#221e19', mark: '#3b332a', shadow: '#000000'};
 
 const GROUND_VERT = /* glsl */ `varying vec3 vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`;
 const GROUND_FRAG = /* glsl */ `uniform vec3 uG; uniform vec3 uM; uniform vec3 uBg; uniform float uRoll; uniform vec3 uC; varying vec3 vW;
@@ -39,7 +39,7 @@ const GROUND_FRAG = /* glsl */ `uniform vec3 uG; uniform vec3 uM; uniform vec3 u
 // the airframe as a ghost: a fresnel shell, bright at the silhouette, nearly clear face on
 const GHOST_VERT = /* glsl */ `varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.0); vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }`;
 const GHOST_FRAG = /* glsl */ `uniform vec3 uCol; uniform float uA; varying vec3 vN; varying vec3 vV;
-  void main(){ float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 2.4); gl_FragColor = vec4(uCol, uA * (0.05 + 0.6 * f)); }`;
+  void main(){ float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 2.4); gl_FragColor = vec4(uCol, uA * (0.015 + 0.5 * f)); }`;
 // the Skymaster's shape around the gear plate (the plate top is the belly, y = 0; the nose toward +z): a pod with the
 // tractor engine forward and the pusher aft, a high wing, twin booms and the tail between them
 function buildGhost(mat) {
@@ -154,7 +154,7 @@ export function createCessnaStage({canvas}) {
   sun.shadow.bias = -0.0003;
   sun.shadow.normalBias = 0.002;
   scene.add(sun, sun.target);
-  scene.add(new THREE.HemisphereLight('#fffaf2', '#d9c6a6', 0.65));
+  scene.add(new THREE.HemisphereLight('#fffaf2', '#3b332a', 0.65));
 
   const groundMat = new THREE.ShaderMaterial({
     vertexShader: GROUND_VERT,
@@ -167,7 +167,7 @@ export function createCessnaStage({canvas}) {
   scene.add(ground);
   const shade = new THREE.Mesh(
     new THREE.PlaneGeometry(200, 200),
-    new THREE.ShadowMaterial({color: COL.shadow, opacity: 0.3, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8}),
+    new THREE.ShadowMaterial({color: COL.shadow, opacity: 0.5, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8}),
   );
   shade.rotation.x = -Math.PI / 2;
   shade.receiveShadow = true;
@@ -175,7 +175,7 @@ export function createCessnaStage({canvas}) {
 
   const gear = buildGear();
   scene.add(gear.root);
-  const ghostMat = new THREE.ShaderMaterial({vertexShader: GHOST_VERT, fragmentShader: GHOST_FRAG, uniforms: {uCol: {value: new THREE.Color('#ffffff')}, uA: {value: 0}}, transparent: true, depthWrite: false, side: THREE.DoubleSide});
+  const ghostMat = new THREE.ShaderMaterial({vertexShader: GHOST_VERT, fragmentShader: GHOST_FRAG, uniforms: {uCol: {value: new THREE.Color('#8fb4d9')}, uA: {value: 0}}, transparent: true, depthWrite: false, side: THREE.DoubleSide});
   const ghost = buildGhost(ghostMat);
   ghost.userData.on = false;
   ghost.visible = false;

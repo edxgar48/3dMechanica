@@ -15,7 +15,7 @@ import {createBeestStage} from './stage.js';
 // review sheets all read: change a time there and everything follows.
 export const SCRIPT = TIMELINE.script;
 export const DURATION = TIMELINE.duration;
-export const DEFAULTS = {duration: DURATION, fps: 60, theme: 'light', hud: {enabled: false, title: 'beestsim', subtitle: ''}, director: {enabled: false}, watermark: ''};
+export const DEFAULTS = {duration: DURATION, fps: 60, theme: 'dark', hud: {enabled: false, title: 'beestsim', subtitle: ''}, director: {enabled: false}, watermark: ''};
 export const HERO = {st: 0, side: 0};
 const D2R = Math.PI / 180;
 const smoother = (x) => {
@@ -320,7 +320,7 @@ export function makeConsoleFrame(ui, st, src = FILM_SRC) {
 
 export function makeFilm() {
   return async ({cfg, canvas, capture}) => {
-    const st = createBeestStage({canvas, palette: cfg.palette ?? 'dune', ink: cfg.ink ?? 0.7});
+    const st = createBeestStage({canvas, palette: cfg.palette ?? 'night', ink: cfg.ink ?? 0.7});
     const resize = () => st.resize(1600, 900, capture ? devicePixelRatio || 1 : Math.min(devicePixelRatio || 1, 2));
     resize();
     st.setPrints(footprints(st.bodyPos));

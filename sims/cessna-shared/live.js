@@ -24,15 +24,15 @@ const SPEED = [0.1, 2];
 const speedK = (v) => (v - SPEED[0]) / (SPEED[1] - SPEED[0]);
 
 const CSS = (top) => `
-html,body{background:#f2e6d2;overflow:hidden}
+html,body{background:#1a1713;overflow:hidden}
 #app{position:absolute!important;inset:auto!important;left:0;top:0;width:${W}px;height:${H}px;transform-origin:0 0}
 #gl{touch-action:none;cursor:grab}
 #gl.drag{cursor:grabbing}
 .bt{pointer-events:auto;cursor:pointer}
 .bt:hover{filter:brightness(.96)}
 .hit{position:absolute;pointer-events:auto;cursor:ew-resize}
-.tourchip{position:absolute;left:800px;top:154px;transform:translateX(-50%);display:flex;align-items:center;gap:7px;height:22px;padding:0 11px;border:1px solid #eadfcd;border-radius:4px;background:rgba(252,249,244,.95);color:#2a2521;font:700 9px 'JetBrains Mono',monospace;letter-spacing:1.3px;white-space:nowrap;cursor:pointer;pointer-events:auto}
-.tourchip i{display:block;width:6px;height:6px;border-radius:50%;background:#e3562a}
+.tourchip{position:absolute;left:800px;top:154px;transform:translateX(-50%);display:flex;align-items:center;gap:7px;height:22px;padding:0 11px;border:1px solid #2f2a24;border-radius:4px;background:rgba(26,23,20,.92);color:#ece4d8;font:700 9px 'JetBrains Mono',monospace;letter-spacing:1.3px;white-space:nowrap;cursor:pointer;pointer-events:auto}
+.tourchip i{display:block;width:6px;height:6px;border-radius:50%;background:#ff6a3a}
 .tourchip.on i{animation:blink 1.2s steps(2) infinite}
 @keyframes blink{50%{opacity:.15}}
 .turn{position:fixed;left:0;right:0;bottom:18px;text-align:center;font:600 12px/1.4 'JetBrains Mono',monospace;letter-spacing:1px;color:#9b8f80;text-transform:uppercase;display:none}

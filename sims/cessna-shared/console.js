@@ -2,7 +2,8 @@
 // the mechanism state with its live schematic, the flight panel, the system overview, the sequence switch, the views,
 // the display toggles, the gear operation timeline, floor notes and the labels with leaders into the mechanism.
 // update(s) redraws every live part from the frame's state.
-export const C = {ink: '#2a2521', mute: '#9b8f80', faint: '#d9cdbb', line: '#eadfcd', panel: 'rgba(252,249,244,.95)', or: '#e3562a', green: '#2fa36b', blue: '#3c79a8'};
+// dark theme: warm light ink on near-black panels, paper is the fill of an unlit control
+export const C = {ink: '#ece4d8', mute: '#9a8f82', faint: '#4e463d', line: '#2f2a24', panel: 'rgba(26,23,20,.92)', paper: '#1c1915', or: '#ff6a3a', green: '#3cc282', blue: '#5b9bd0'};
 export const VIEWS = ['hero', 'front', 'plan', 'top', 'gearbox', 'sidetube'];
 export const VIEW_LABEL = {hero: 'HERO', front: 'FRONT', plan: 'PLAN', top: 'TOP ¾', gearbox: 'GEARBOX', sidetube: 'SIDE TUBE'};
 export const DISPLAY = ['labels', 'section', 'xray', 'exploded', 'fuselage', 'orbit'];
@@ -11,12 +12,12 @@ const CSS = `
 #app{font-family:Inter,system-ui,sans-serif;color:${C.ink};-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
 .ui{position:absolute;inset:0;pointer-events:none}
 .mo{font-family:'JetBrains Mono',ui-monospace,monospace}
-.cp{position:absolute;background:${C.panel};border:1px solid ${C.line};border-radius:6px;box-shadow:0 2px 10px rgba(120,90,50,.08)}
+.cp{position:absolute;background:${C.panel};border:1px solid ${C.line};border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.4)}
 .ph{position:absolute;display:flex;align-items:center;gap:9px;font:700 10.5px 'JetBrains Mono',monospace;letter-spacing:1.8px}
 .ph i{display:block;width:3px;height:13px;background:${C.or}}
 .pn{position:absolute;font:500 9.5px 'JetBrains Mono',monospace;color:${C.mute};letter-spacing:1px}
 .sm{font:500 9px 'JetBrains Mono',monospace;letter-spacing:1.6px;color:${C.mute};text-transform:uppercase;white-space:nowrap}
-.bt{position:absolute;height:21px;padding:0 10px;display:flex;align-items:center;justify-content:center;border:1px solid ${C.faint};border-radius:4px;background:#fffdf9;font:700 9.4px 'JetBrains Mono',monospace;letter-spacing:1.3px;color:${C.ink};white-space:nowrap}
+.bt{position:absolute;height:21px;padding:0 10px;display:flex;align-items:center;justify-content:center;border:1px solid ${C.faint};border-radius:4px;background:${C.paper};font:700 9.4px 'JetBrains Mono',monospace;letter-spacing:1.3px;color:${C.ink};white-space:nowrap}
 .call{position:absolute;white-space:nowrap}
 .call b{display:flex;align-items:center;gap:6px;font:700 9.4px 'JetBrains Mono',monospace;letter-spacing:1.3px;color:${C.ink}}
 .call b i{display:block;width:6px;height:6px;background:${C.or}}
@@ -53,7 +54,7 @@ export function createConsole(app) {
   add(`<div class="mo" style="position:absolute;left:85px;top:35px;color:#fff;font-size:16px;font-weight:600;letter-spacing:4px">337</div>`);
   add(`<div class="sm" style="position:absolute;left:182px;top:22px;letter-spacing:2.4px">GENERAL AVIATION</div>`);
   add(`<div style="position:absolute;left:181px;top:37px;font-size:33px;font-weight:700;letter-spacing:-.6px;line-height:1">Cessna 337 Skymaster <span style="color:${C.or};font-weight:400">/</span></div>`);
-  add(`<div class="mo" style="position:absolute;left:182px;top:77px;font-size:11.2px;letter-spacing:2.2px;color:#6d6357">MAIN LANDING GEAR / RETRACTION MECHANISM</div>`);
+  add(`<div class="mo" style="position:absolute;left:182px;top:77px;font-size:11.2px;letter-spacing:2.2px;color:#a59a8c">MAIN LANDING GEAR / RETRACTION MECHANISM</div>`);
   add(`<div class="sm" style="position:absolute;left:1087px;top:49px;letter-spacing:2.6px;font-size:9.6px">TWIN ENGINE · CENTRELINE THRUST</div>`);
   add(`<div class="mo" style="position:absolute;left:1352px;top:47px;color:${C.or};font-size:12px;letter-spacing:-1px">//////</div>`);
   add(`<div style="position:absolute;left:1418px;top:34px;color:${C.or};font-size:39px;font-weight:700;letter-spacing:-.8px;line-height:1">337</div>`);
@@ -79,7 +80,7 @@ export function createConsole(app) {
   const bars = ['HEIGHT', 'GEAR', 'STROKE'].map((n, i) => {
     const y = 508 + i * 23;
     add(`<div class="sm" style="position:absolute;left:42px;top:${y}px">${n}</div>`);
-    add(`<div style="position:absolute;left:97px;top:${y + 4}px;width:134px;height:4px;background:#efe6d8;border-radius:2px"></div>`);
+    add(`<div style="position:absolute;left:97px;top:${y + 4}px;width:134px;height:4px;background:${C.line};border-radius:2px"></div>`);
     const f = add(`<div style="position:absolute;left:97px;top:${y + 4}px;height:4px;background:${C.or};border-radius:2px"></div>`);
     const v = add(`<div class="mo" style="position:absolute;right:${1600 - 296}px;top:${y - 2}px;font-size:11px;font-weight:600"></div>`);
     return {f, v};
@@ -91,7 +92,7 @@ export function createConsole(app) {
   // ------------------------------------------------------------ 03 system overview
   panel(1313, 126, 258, 210, 'SYSTEM OVERVIEW', '03');
   add(`<div class="mo" style="position:absolute;left:1327px;top:163px;font-size:10.5px;font-weight:700;letter-spacing:1.6px">MAIN LANDING GEAR</div>`);
-  add(`<div class="mo" style="position:absolute;left:1327px;top:183px;width:232px;font-size:9.4px;line-height:1.75;color:#5f564b">One hydraulic actuator, a single rack and pinion, and a universal joint at each end of the output shaft. The side tubes spin; they never swing.</div>`);
+  add(`<div class="mo" style="position:absolute;left:1327px;top:183px;width:232px;font-size:9.4px;line-height:1.75;color:#a89c8c">One hydraulic actuator, a single rack and pinion, and a universal joint at each end of the output shaft. The side tubes spin; they never swing.</div>`);
   add(`<div style="position:absolute;left:1327px;top:276px;width:232px;height:1px;background:${C.line}"></div>`);
   [['1', 'ACTUATOR'], ['2', 'LEGS'], ['180°', 'SWEEP']].forEach(([v, n], i) => {
     const x = 1327 + i * 85;
@@ -103,7 +104,7 @@ export function createConsole(app) {
   // ------------------------------------------------------------ 04 sequence, 05 views, 06 display
   const btn = {};
   panel(1313, 353, 258, 82, 'SEQUENCE', '04');
-  add(`<div style="position:absolute;left:1327px;top:390px;width:230px;height:30px;border-radius:5px;background:#efe6d8"></div>`);
+  add(`<div style="position:absolute;left:1327px;top:390px;width:230px;height:30px;border-radius:5px;background:${C.line}"></div>`);
   btn.takeoff = add(`<div class="bt" style="left:1330px;top:393px;width:112px;height:24px;border:none;background:transparent">TAKEOFF</div>`);
   btn.landing = add(`<div class="bt" style="left:1442px;top:393px;width:112px;height:24px;border:none;background:transparent">LANDING</div>`);
   const btnRow = (keys, labels, x0, y, wmax = 230) => {
@@ -131,15 +132,15 @@ export function createConsole(app) {
   const opPhase = add(`<div class="mo" style="position:absolute;left:506px;width:500px;top:790px;text-align:center;font-size:9.6px;font-weight:700;letter-spacing:1.6px;color:${C.or}"></div>`);
   const opTo = add(`<div class="sm" style="position:absolute;right:${1600 - 1010}px;top:791px"></div>`);
   const TL = {x: 508, w: 504};
-  add(`<div style="position:absolute;left:${TL.x}px;top:820px;width:${TL.w}px;height:3px;background:#efe6d8;border-radius:2px"></div>`);
+  add(`<div style="position:absolute;left:${TL.x}px;top:820px;width:${TL.w}px;height:3px;background:${C.line};border-radius:2px"></div>`);
   const tlFill = add(`<div style="position:absolute;left:${TL.x}px;top:820px;height:3px;background:${C.or};border-radius:2px"></div>`);
-  const tlKnob = add(`<div style="position:absolute;top:814px;width:15px;height:15px;margin-left:-7.5px;border-radius:50%;background:#fff;border:2px solid ${C.or};box-sizing:border-box"></div>`);
+  const tlKnob = add(`<div style="position:absolute;top:814px;width:15px;height:15px;margin-left:-7.5px;border-radius:50%;background:${C.paper};border:2px solid ${C.or};box-sizing:border-box"></div>`);
   const tlTime = add(`<div class="mo" style="position:absolute;left:506px;top:834px;font-size:9.6px;color:${C.mute};letter-spacing:1px"></div>`);
   add(`<div class="sm" style="position:absolute;left:1029px;top:805px">SPEED</div>`);
   const SP = {x: 1031, w: 92};
-  add(`<div style="position:absolute;left:${SP.x}px;top:823px;width:${SP.w}px;height:3px;background:#efe6d8;border-radius:2px"></div>`);
+  add(`<div style="position:absolute;left:${SP.x}px;top:823px;width:${SP.w}px;height:3px;background:${C.line};border-radius:2px"></div>`);
   const spFill = add(`<div style="position:absolute;left:${SP.x}px;top:823px;height:3px;background:${C.or};border-radius:2px"></div>`);
-  const spKnob = add(`<div style="position:absolute;top:817px;width:15px;height:15px;margin-left:-7.5px;border-radius:50%;background:#fff;border:2px solid ${C.or};box-sizing:border-box"></div>`);
+  const spKnob = add(`<div style="position:absolute;top:817px;width:15px;height:15px;margin-left:-7.5px;border-radius:50%;background:${C.paper};border:2px solid ${C.or};box-sizing:border-box"></div>`);
   const spVal = add(`<div class="mo" style="position:absolute;left:1128px;top:818px;font-size:10px;font-weight:700"></div>`);
 
   // ------------------------------------------------------------ footer and floor notes
@@ -158,7 +159,7 @@ export function createConsole(app) {
   const callSvg = add(`<svg data-callouts style="position:absolute;inset:0;overflow:visible" width="1600" height="900"></svg>`);
   const callG = add(`<div data-callouts style="position:absolute;inset:0"></div>`);
   const ring = add(`<div class="ring"></div>`);
-  const cur = add(`<div class="cur"><svg width="22" height="22" viewBox="0 0 34 34"><path d="M4 3 L30 13.5 L17.5 17.5 L13.5 30 Z" fill="#111" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/></svg></div>`);
+  const cur = add(`<div class="cur"><svg width="22" height="22" viewBox="0 0 34 34"><path d="M4 3 L30 13.5 L17.5 17.5 L13.5 30 Z" fill="#f2f3f5" stroke="#0d0f12" stroke-width="2.2" stroke-linejoin="round"/></svg></div>`);
   const centre = (n) => {
     const r = n.getBoundingClientRect();
     return [r.left + r.width / 2, r.top + r.height / 2];
@@ -193,10 +194,10 @@ export function createConsole(app) {
         const rx = 92 - d * 52;
         const th = s.stroke * Math.PI;
         let h = `<text x="2" y="10" font-size="7.4" letter-spacing="1" fill="${C.mute}" font-family="JetBrains Mono">ACTUATOR</text>`;
-        h += `<rect x="2" y="18" width="${rx - 8}" height="17" rx="8" fill="#fbf8f2" stroke="${C.ink}" stroke-width="1.2"/>`;
+        h += `<rect x="2" y="18" width="${rx - 8}" height="17" rx="8" fill="${C.paper}" stroke="${C.ink}" stroke-width="1.2"/>`;
         h += `<line x1="${rx - 8}" x2="${rx + 2}" y1="26.5" y2="26.5" stroke="${C.ink}" stroke-width="1.6"/><rect x="${rx}" y="14" width="7" height="27" fill="${C.or}"/>`;
         h += `<line x1="0" x2="250" y1="36.5" y2="36.5" stroke="${C.ink}" stroke-width="1"/>`;
-        h += `<rect x="${rx - 70}" y="40" width="96" height="7" fill="#fbf8f2" stroke="${C.ink}" stroke-width="1"/>`;
+        h += `<rect x="${rx - 70}" y="40" width="96" height="7" fill="${C.paper}" stroke="${C.ink}" stroke-width="1"/>`;
         for (let i = 0; i < 16; i++) h += `<line x1="${rx - 68 + i * 6}" x2="${rx - 68 + i * 6}" y1="47" y2="51" stroke="${C.ink}" stroke-width=".9"/>`;
         h += `<text x="24" y="72" font-size="7.4" letter-spacing="1" fill="${C.mute}" font-family="JetBrains Mono">RACK</text><text x="134" y="76" font-size="7.4" letter-spacing="1" fill="${C.mute}" font-family="JetBrains Mono">PINION</text>`;
         h += `<g transform="translate(108 70) rotate(${((th * 180) / Math.PI).toFixed(1)})"><circle r="17" fill="none" stroke="${C.ink}" stroke-width="1.1"/>${Array.from({length: 16}, (_, i) => `<line x1="0" y1="-17" x2="0" y2="-20.5" stroke="${C.ink}" stroke-width="1" transform="rotate(${i * 22.5})"/>`).join('')}<path d="M-12 -12L12 12M12 -12L-12 12" stroke="${C.ink}" stroke-width="1"/></g>`;
@@ -242,7 +243,7 @@ export function createConsole(app) {
       }
       // sequence, views, display
       const onBtn = (k, on) => {
-        btn[k].style.background = on ? C.or : '#fffdf9';
+        btn[k].style.background = on ? C.or : C.paper;
         btn[k].style.color = on ? '#fff' : C.ink;
         btn[k].style.borderColor = on ? C.or : C.faint;
       };

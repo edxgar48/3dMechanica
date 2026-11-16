@@ -4,17 +4,18 @@
 // leaders into the engine. Fixed 1600 x 900 CSS layout; update(s) redraws every live part from the frame's state.
 import {E, ORDER, PIN_PHASE, pressure, STROKES, volume, liftEx, liftIn, pistonFrac} from './kin.js';
 
-export const C = {ink: '#16181b', mute: '#8b8f95', faint: '#c9ccd0', line: '#e1e3e6', panel: 'rgba(248,248,249,.94)', red: '#d6182b', blue: '#3d8fe0', grey: '#5d6670', orange: '#f05a23', exh: '#8b8f95'};
+// dark theme: light ink on near-black panels, paper is the fill of an unlit control
+export const C = {ink: '#e7e9ec', mute: '#8f959d', faint: '#4a5059', line: '#2b3037', panel: 'rgba(21,24,29,.92)', paper: '#15181d', red: '#ff3d55', blue: '#4f9cf0', grey: '#9aa3ad', orange: '#ff6a2b', exh: '#8f959d'};
 export const CAMS = ['hero', 'front', 'side', 'valley', 'cyl'];
 export const CUTS = ['glass', 'section', 'solid'];
 export const OVERLAYS = ['callouts', 'charge', 'arrows', 'isolate', 'refract', 'charts'];
 const CSS = `
 #app{font-family:Inter,system-ui,sans-serif;color:${C.ink};-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
 .ui{position:absolute;inset:0;pointer-events:none}
-.pn{position:absolute;background:${C.panel};border:1px solid ${C.line};box-shadow:0 1px 2px rgba(20,22,26,.04)}
+.pn{position:absolute;background:${C.panel};border:1px solid ${C.line};box-shadow:0 1px 3px rgba(0,0,0,.35)}
 .cp{font-size:9.6px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap}
 .mu{color:${C.mute}}
-.tb{position:absolute;height:19px;padding:0 7px;display:flex;align-items:center;justify-content:center;font-size:8.8px;font-weight:600;letter-spacing:.9px;text-transform:uppercase;border:1px solid ${C.line};background:#fff;color:${C.ink};white-space:nowrap}
+.tb{position:absolute;height:19px;padding:0 7px;display:flex;align-items:center;justify-content:center;font-size:8.8px;font-weight:600;letter-spacing:.9px;text-transform:uppercase;border:1px solid ${C.line};background:${C.paper};color:${C.ink};white-space:nowrap}
 .call{position:absolute;white-space:nowrap}
 .call b{display:block;font-size:11.5px;font-weight:600;letter-spacing:.1px}
 .call span{display:block;font-size:8.6px;font-weight:500;letter-spacing:1.4px;color:${C.mute};text-transform:uppercase;margin-top:2px}
@@ -47,7 +48,7 @@ export function createConsole(app) {
   const rpmBig = add(`<div style="position:absolute;left:33px;top:103px;font-size:56px;font-weight:800;letter-spacing:-3.2px;color:${C.red};line-height:1"></div>`);
   add(`<div style="position:absolute;left:255px;top:141px;font-size:11px;font-weight:500">8000</div>`);
   add(`<div style="position:absolute;left:35px;top:166px;width:247px;height:6px;border:1px solid ${C.faint};border-top:none"></div>`);
-  add(`<div style="position:absolute;left:35px;top:174px;width:247px;height:9px;background:#e6e7e9"></div>`);
+  add(`<div style="position:absolute;left:35px;top:174px;width:247px;height:9px;background:${C.line}"></div>`);
   const rpmFill = add(`<div style="position:absolute;left:35px;top:174px;height:9px;background:${C.red}"></div>`);
   add(`<div class="cp mu" style="position:absolute;left:35px;top:188px;font-size:9px;font-weight:500">0</div>`);
   add(`<div class="cp" style="position:absolute;left:212px;top:188px;font-size:9px;font-weight:500;color:${C.ink}">REV / MIN</div>`);
@@ -82,11 +83,11 @@ export function createConsole(app) {
   add(`<div class="cp" style="position:absolute;left:45px;top:818px;font-weight:500">ENGINE SPEED</div>`);
   const speedVal = add(`<div class="cp" style="position:absolute;right:${1600 - 284}px;top:818px;font-weight:700"></div>`);
   const SL = {x: 46, w: 238};
-  add(`<div style="position:absolute;left:${SL.x}px;top:836px;width:${SL.w}px;height:2px;background:#e1e3e6"></div>`);
+  add(`<div style="position:absolute;left:${SL.x}px;top:836px;width:${SL.w}px;height:2px;background:${C.line}"></div>`);
   const speedKnob = add(`<div style="position:absolute;top:831px;width:9px;height:11px;margin-left:-4.5px;background:${C.red}"></div>`);
   add(`<div class="cp" style="position:absolute;left:45px;top:851px;font-weight:500">PLAYBACK</div>`);
   const playVal = add(`<div class="cp" style="position:absolute;right:${1600 - 284}px;top:851px;font-weight:700"></div>`);
-  add(`<div style="position:absolute;left:${SL.x}px;top:869px;width:${SL.w}px;height:2px;background:#e1e3e6"></div>`);
+  add(`<div style="position:absolute;left:${SL.x}px;top:869px;width:${SL.w}px;height:2px;background:${C.line}"></div>`);
   const playKnob = add(`<div style="position:absolute;top:864px;width:9px;height:11px;margin-left:-4.5px;background:${C.red}"></div>`);
 
   // ------------------------------------------------------------ legend
@@ -102,7 +103,7 @@ export function createConsole(app) {
   add(`<div style="position:absolute;left:1329px;top:165px;width:224px;height:1px;background:${C.line}"></div>`);
   const barBig = add(`<div style="position:absolute;left:1328px;top:173px;font-size:36px;font-weight:800;letter-spacing:-1.6px;color:${C.red};line-height:1"></div>`);
   const barUnit = add(`<div style="position:absolute;top:197px;font-size:10.5px;font-weight:500;letter-spacing:1px;line-height:1.35">BAR<br><span style="color:${C.mute};letter-spacing:1.5px">CHAMBER PRESSURE</span></div>`);
-  add(`<div style="position:absolute;left:1329px;top:228px;width:224px;height:5px;background:#e6e7e9"></div>`);
+  add(`<div style="position:absolute;left:1329px;top:228px;width:224px;height:5px;background:${C.line}"></div>`);
   const barFill = add(`<div style="position:absolute;left:1329px;top:228px;height:5px;background:${C.red}"></div>`);
 
   // ------------------------------------------------------------ valve timing
@@ -149,7 +150,7 @@ export function createConsole(app) {
   const callSvg = add(`<svg data-callouts style="position:absolute;inset:0;overflow:visible" width="1600" height="900"></svg>`);
   const callG = add(`<div data-callouts style="position:absolute;inset:0"></div>`);
   const ring = add(`<div class="ring"></div>`);
-  const cur = add(`<div class="cur"><svg width="22" height="22" viewBox="0 0 34 34"><path d="M4 3 L30 13.5 L17.5 17.5 L13.5 30 Z" fill="#111" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/></svg></div>`);
+  const cur = add(`<div class="cur"><svg width="22" height="22" viewBox="0 0 34 34"><path d="M4 3 L30 13.5 L17.5 17.5 L13.5 30 Z" fill="#f2f3f5" stroke="#0d0f12" stroke-width="2.2" stroke-linejoin="round"/></svg></div>`);
   const centre = (n) => {
     const r = n.getBoundingClientRect();
     return [r.left + r.width / 2, r.top + r.height / 2];
@@ -199,9 +200,9 @@ export function createConsole(app) {
         sc.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${r + 18}" fill="none" stroke="${C.line}"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${C.faint}" stroke-dasharray="2 2"/>
           <line x1="${cx}" y1="${cy}" x2="${px.toFixed(1)}" y2="${py.toFixed(1)}" stroke="${C.red}" stroke-width="2"/>
           <line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${sx.toFixed(1)}" y2="${cy}" stroke="${C.ink}" stroke-width="1.2"/>
-          <rect x="${(sx - 10).toFixed(1)}" y="${cy - 30}" width="20" height="60" fill="#fff" stroke="${C.ink}" stroke-width="1.6"/>
+          <rect x="${(sx - 10).toFixed(1)}" y="${cy - 30}" width="20" height="60" fill="${C.paper}" stroke="${C.ink}" stroke-width="1.6"/>
           <line x1="${cx + Lr - r + 10}" x2="226" y1="${cy - 32}" y2="${cy - 32}" stroke="${C.ink}" stroke-width="1"/><line x1="${cx + Lr - r + 10}" x2="226" y1="${cy + 32}" y2="${cy + 32}" stroke="${C.ink}" stroke-width="1"/>
-          <circle cx="${cx}" cy="${cy}" r="3.5" fill="#fff" stroke="${C.ink}" stroke-width="1.6"/><circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="3.5" fill="#fff" stroke="${C.ink}" stroke-width="1.6"/><circle cx="${sx.toFixed(1)}" cy="${cy}" r="3" fill="#fff" stroke="${C.ink}" stroke-width="1.4"/>
+          <circle cx="${cx}" cy="${cy}" r="3.5" fill="${C.paper}" stroke="${C.ink}" stroke-width="1.6"/><circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="3.5" fill="${C.paper}" stroke="${C.ink}" stroke-width="1.6"/><circle cx="${sx.toFixed(1)}" cy="${cy}" r="3" fill="${C.paper}" stroke="${C.ink}" stroke-width="1.4"/>
           <text x="${(cx + px) / 2 + 4}" y="${(cy + py) / 2 - 3}" font-size="9" fill="${C.ink}">r</text><text x="${(px + sx) / 2}" y="${cy - 6}" font-size="9" fill="${C.ink}">L</text>
           <line x1="${cx + Lr - r}" x2="${cx + Lr + r}" y1="112" y2="112" stroke="${C.ink}" stroke-width=".8"/><line x1="${cx + Lr - r}" x2="${cx + Lr - r}" y1="106" y2="116" stroke="${C.ink}" stroke-width=".8"/><line x1="${cx + Lr + r}" x2="${cx + Lr + r}" y1="106" y2="116" stroke="${C.ink}" stroke-width=".8"/>
           <text x="${cx + Lr + r + 6}" y="126" font-size="9.4" letter-spacing="1.4" fill="${C.mute}">STROKE 89 MM</text>`;
@@ -215,7 +216,7 @@ export function createConsole(app) {
           const a = (-90 + sgn * 45) * (Math.PI / 180);
           const bx = cx + Math.cos(a) * 70;
           const by = cy + Math.sin(a) * 70;
-          h += `<line x1="${cx}" y1="${cy}" x2="${bx}" y2="${by}" stroke="${C.faint}" stroke-width=".8" stroke-dasharray="3 3"/><g transform="translate(${bx} ${by}) rotate(${sgn * 45})"><rect x="-10" y="-12" width="20" height="16" fill="#fff" stroke="${C.ink}" stroke-width="1.4"/><line x1="-6" x2="6" y1="-1" y2="-1" stroke="${C.ink}" stroke-width="1.2"/></g>`;
+          h += `<line x1="${cx}" y1="${cy}" x2="${bx}" y2="${by}" stroke="${C.faint}" stroke-width=".8" stroke-dasharray="3 3"/><g transform="translate(${bx} ${by}) rotate(${sgn * 45})"><rect x="-10" y="-12" width="20" height="16" fill="${C.paper}" stroke="${C.ink}" stroke-width="1.4"/><line x1="-6" x2="6" y1="-1" y2="-1" stroke="${C.ink}" stroke-width="1.2"/></g>`;
         }
         const names = ['1·2', '3·4', '5·6', '7·8'];
         PIN_PHASE.forEach((ph0, p) => {
@@ -223,9 +224,9 @@ export function createConsole(app) {
           const x = cx + Math.sin(a) * 40;
           const y = cy - Math.cos(a) * 40;
           const lit = p === s.pin;
-          h += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${C.ink}" stroke-width=".9"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="9.5" fill="${lit ? C.red : '#fff'}" stroke="${lit ? C.red : C.ink}" stroke-width="1.3"/><text x="${x.toFixed(1)}" y="${(y + 3).toFixed(1)}" font-size="7.6" text-anchor="middle" fill="${lit ? '#fff' : C.ink}" font-weight="600">${names[p]}</text>`;
+          h += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${C.ink}" stroke-width=".9"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="9.5" fill="${lit ? C.red : C.paper}" stroke="${lit ? C.red : C.ink}" stroke-width="1.3"/><text x="${x.toFixed(1)}" y="${(y + 3).toFixed(1)}" font-size="7.6" text-anchor="middle" fill="${lit ? '#fff' : C.ink}" font-weight="600">${names[p]}</text>`;
         });
-        h += `<circle cx="${cx}" cy="${cy}" r="6" fill="#fff" stroke="${C.ink}" stroke-width="1.3"/><line x1="${cx - 4}" x2="${cx + 4}" y1="${cy - 4}" y2="${cy + 4}" stroke="${C.ink}"/><line x1="${cx - 4}" x2="${cx + 4}" y1="${cy + 4}" y2="${cy - 4}" stroke="${C.ink}"/><text x="${cx - 12}" y="${cy - 26}" font-size="8" fill="${C.ink}">90°</text>`;
+        h += `<circle cx="${cx}" cy="${cy}" r="6" fill="${C.paper}" stroke="${C.ink}" stroke-width="1.3"/><line x1="${cx - 4}" x2="${cx + 4}" y1="${cy - 4}" y2="${cy + 4}" stroke="${C.ink}"/><line x1="${cx - 4}" x2="${cx + 4}" y1="${cy + 4}" y2="${cy - 4}" stroke="${C.ink}"/><text x="${cx - 12}" y="${cy - 26}" font-size="8" fill="${C.ink}">90°</text>`;
         cp.innerHTML = h;
       }
 
@@ -252,7 +253,7 @@ export function createConsole(app) {
         for (const [v, l] of [[0, '0'], [0.5, '50'], [1, '100']]) h += `<text x="12" y="${Y(v) + 2}" font-size="6.5" text-anchor="end" fill="${C.mute}">${l}</text>`;
         ['POWER', 'EXHAUST', 'INTAKE', 'COMPR'].forEach((n, i) => (h += `<text x="${X(i * 180 + 90)}" y="10" font-size="6.2" letter-spacing=".8" text-anchor="middle" fill="${C.mute}">${n}</text>`));
         const seg = Math.floor(((ph % 720) + 720) % 720 / 180);
-        h += `<rect x="${X(seg * 180)}" y="${Y(1)}" width="${X(180) - X(0)}" height="92" fill="${seg === 0 ? 'rgba(214,24,43,.1)' : 'rgba(20,22,26,.05)'}"/>`;
+        h += `<rect x="${X(seg * 180)}" y="${Y(1)}" width="${X(180) - X(0)}" height="92" fill="${seg === 0 ? 'rgba(255,61,85,.1)' : 'rgba(255,255,255,.05)'}"/>`;
         for (const d of [180, 360, 540]) h += `<line x1="${X(d)}" x2="${X(d)}" y1="${Y(1)}" y2="${Y(0)}" stroke="${C.line}" stroke-width=".8"/>`;
         h += `<line x1="${X(0)}" x2="${X(720)}" y1="${Y(0)}" y2="${Y(0)}" stroke="${C.ink}" stroke-width=".8"/>`;
         const curve = (fn, col, w) => {
@@ -278,7 +279,7 @@ export function createConsole(app) {
         for (let d = 0; d <= 720; d += 3) loop += `${d ? 'L' : 'M'}${X(volume(d)).toFixed(1)} ${Y(pressure(d)).toFixed(1)}`;
         let h = `<text x="2" y="12" font-size="6.5" fill="${C.mute}">bar</text><text x="12" y="${Y(50) + 2}" font-size="6.5" text-anchor="end" fill="${C.mute}">50</text><text x="12" y="${Y(25) + 2}" font-size="6.5" text-anchor="end" fill="${C.mute}">25</text><text x="12" y="${Y(0) + 2}" font-size="6.5" text-anchor="end" fill="${C.mute}">0</text>`;
         h += `<line x1="${X(1)}" x2="${X(E.cr)}" y1="${Y(0)}" y2="${Y(0)}" stroke="${C.ink}" stroke-width=".8"/><line x1="${X(1)}" x2="${X(1)}" y1="${Y(55)}" y2="${Y(0)}" stroke="${C.ink}" stroke-width=".8"/>`;
-        h += `<path d="${loop} Z" fill="rgba(214,24,43,.12)" stroke="${C.ink}" stroke-width="1.3"/>`;
+        h += `<path d="${loop} Z" fill="rgba(255,61,85,.12)" stroke="${C.ink}" stroke-width="1.3"/>`;
         h += `<text x="${X(1.3)}" y="${Y(52)}" font-size="6.2" letter-spacing=".8" fill="${C.mute}">IGNITION</text><text x="${X(4.2)}" y="${Y(14)}" font-size="6.2" letter-spacing=".8" fill="${C.mute}">EXPANSION</text><text x="${X(6)}" y="${Y(3.5)}" font-size="6.2" letter-spacing=".8" fill="${C.mute}">COMPRESSION</text>`;
         h += `<circle cx="${X(volume(ph)).toFixed(1)}" cy="${Y(pressure(ph)).toFixed(1)}" r="3" fill="${C.red}"/>`;
         h += `<text x="${X(1)}" y="${Y(0) + 10}" font-size="6.2" fill="${C.mute}">TDC</text><text x="${X(E.cr)}" y="${Y(0) + 10}" font-size="6.2" text-anchor="end" fill="${C.mute}">BDC</text><text x="${X(E.cr)}" y="${Y(0) + 19}" font-size="6" letter-spacing=".8" text-anchor="end" fill="${C.mute}">VOLUME ×VC · 1 → 10.2</text>`;
@@ -293,7 +294,7 @@ export function createConsole(app) {
           if (i) h += `<line x1="${x - 28}" x2="${x - 12}" y1="17" y2="17" stroke="${C.faint}"/>`;
           const firing = c === s.firing;
           const tracked = c === s.cyl;
-          h += `<circle cx="${x}" cy="17" r="11.5" fill="${firing ? 'rgba(214,24,43,.55)' : '#fff'}" stroke="${tracked ? C.red : C.faint}" stroke-width="${tracked ? 1.8 : 1}"/>`;
+          h += `<circle cx="${x}" cy="17" r="11.5" fill="${firing ? 'rgba(255,61,85,.55)' : C.paper}" stroke="${tracked ? C.red : C.faint}" stroke-width="${tracked ? 1.8 : 1}"/>`;
           if (tracked) h += `<circle cx="${x}" cy="17" r="15" fill="none" stroke="${C.red}" stroke-width=".8" opacity=".55"/>`;
           h += `<text x="${x}" y="20.5" font-size="10" text-anchor="middle" font-weight="600" fill="${firing ? '#fff' : C.ink}">${c}</text>`;
         });
@@ -303,19 +304,19 @@ export function createConsole(app) {
       // toggles
       for (const k of CAMS) {
         const on = s.cam === k;
-        btn[k].style.background = on ? C.ink : '#fff';
-        btn[k].style.color = on ? '#fff' : C.ink;
+        btn[k].style.background = on ? C.ink : C.paper;
+        btn[k].style.color = on ? C.paper : C.ink;
         btn[k].style.borderColor = on ? C.ink : C.line;
       }
       for (const k of CUTS) {
         const on = s.cut === k;
-        btn[k].style.background = on ? C.ink : '#fff';
-        btn[k].style.color = on ? '#fff' : C.ink;
+        btn[k].style.background = on ? C.ink : C.paper;
+        btn[k].style.color = on ? C.paper : C.ink;
         btn[k].style.borderColor = on ? C.ink : C.line;
       }
       for (const k of OVERLAYS) {
         const on = !!s.overlays[k];
-        btn[k].style.background = on ? C.red : '#fff';
+        btn[k].style.background = on ? C.red : C.paper;
         btn[k].style.color = on ? '#fff' : C.ink;
         btn[k].style.borderColor = on ? C.red : C.line;
       }

@@ -4,13 +4,13 @@ import * as THREE from 'three';
 import {crankPin, P, pinY, R, rodLean} from './kin.js';
 
 const mm = (v) => v * 0.001;
-export const ACCENT = '#d6182b';
+export const ACCENT = '#ff3d55';
 
 export function buildMachine() {
   const root = new THREE.Group();
   const metal = (color, rough = 0.5) => new THREE.MeshStandardMaterial({color, roughness: rough, metalness: 0.6, envMapIntensity: 0.5});
   const steel = metal('#9aa1a9');
-  const dark = metal('#3a3f46', 0.55);
+  const dark = metal('#5a606a', 0.55);
   const accent = new THREE.MeshStandardMaterial({color: ACCENT, roughness: 0.45, metalness: 0.2});
   const shadowed = (m) => {
     m.castShadow = true;

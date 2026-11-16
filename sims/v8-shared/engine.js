@@ -125,8 +125,8 @@ export function buildEngine(opts = {}) {
     plain ? discGeo((rOut + rRoot) / 2, width, holeR, lo ? Math.max(8, Math.round((rOut + rRoot) / 24)) : 48) : gearGeo(teeth, rOut, rRoot, width, helix, holeR);
   const root = new THREE.Group();
   const M = {
-    black: new THREE.MeshPhysicalMaterial({color: '#141518', roughness: 0.3, metalness: 0.2, clearcoat: 0.7, clearcoatRoughness: 0.18}),
-    blackMatte: new THREE.MeshPhysicalMaterial({color: '#1b1c1f', roughness: 0.55, metalness: 0.15, clearcoat: 0.25}),
+    black: new THREE.MeshPhysicalMaterial({color: '#4b515a', roughness: 0.3, metalness: 0.2, clearcoat: 0.7, clearcoatRoughness: 0.18}),
+    blackMatte: new THREE.MeshPhysicalMaterial({color: '#3c4149', roughness: 0.55, metalness: 0.15, clearcoat: 0.25}),
     steel: new THREE.MeshStandardMaterial({color: '#cfd2d6', roughness: 0.22, metalness: 1}),
     alu: new THREE.MeshStandardMaterial({color: '#d9dbdf', roughness: 0.3, metalness: 0.85}),
     bronze: new THREE.MeshStandardMaterial({color: '#b98a55', roughness: 0.3, metalness: 0.9}),
@@ -469,7 +469,7 @@ export function buildEngine(opts = {}) {
       return;
     }
     const solid = mode === 'solid';
-    M.glass.color.set(solid ? '#2b2d31' : '#ffffff');
+    M.glass.color.set(solid ? '#5a6069' : '#ffffff');
     M.glass.opacity = solid ? 0.94 : glassOpacity;
     M.glass.depthWrite = solid;
   };

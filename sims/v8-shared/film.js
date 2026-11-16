@@ -13,7 +13,7 @@ import {createV8Stage} from './stage.js';
 // review sheets all read: change a time there and everything follows.
 export const SCRIPT = TIMELINE.script;
 export const DURATION = TIMELINE.duration;
-export const DEFAULTS = {duration: DURATION, fps: 60, theme: 'light', hud: {enabled: false, title: 'v8d', subtitle: ''}, director: {enabled: false}, watermark: ''};
+export const DEFAULTS = {duration: DURATION, fps: 60, theme: 'dark', hud: {enabled: false, title: 'v8d', subtitle: ''}, director: {enabled: false}, watermark: ''};
 const D2R = Math.PI / 180;
 const mm = (v) => v * 0.001;
 const smoother = (x) => {

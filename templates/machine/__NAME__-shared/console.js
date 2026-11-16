@@ -4,7 +4,8 @@
 // update(s) redraws every live part from the frame's state. REPLACE the readouts with your machine's numbers.
 import {displacement, P, travel} from './kin.js';
 
-export const C = {ink: '#16181b', mute: '#8b8f95', faint: '#c9ccd0', line: '#e1e3e6', panel: 'rgba(248,248,249,.94)', accent: '#d6182b'};
+// dark theme: light ink on near-black panels; paper is the fill of an unlit control
+export const C = {ink: '#e7e9ec', mute: '#8f959d', faint: '#4a5059', line: '#2b3037', panel: 'rgba(21,24,29,.92)', paper: '#15181d', accent: '#ff3d55'};
 export const CAMS = ['hero', 'front', 'side', 'top'];
 export const CUTS = ['solid', 'glass'];
 export const RPM_MIN = 300;
@@ -15,7 +16,7 @@ const CSS = `
 .pn{position:absolute;background:${C.panel};border:1px solid ${C.line}}
 .cp{position:absolute;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap}
 .mu{color:${C.mute}}
-.tb{position:absolute;height:30px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border:1px solid ${C.line};background:#fff;color:${C.ink}}
+.tb{position:absolute;height:30px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border:1px solid ${C.line};background:${C.paper};color:${C.ink}}
 .big{position:absolute;font-weight:800;letter-spacing:-2px;line-height:1}
 .call{position:absolute;white-space:nowrap}
 .call b{display:block;font-size:15px;font-weight:600}
@@ -81,7 +82,7 @@ export function createConsole(app, {title = '__TITLE__'} = {}) {
   add(`<div class="cp mu" style="left:56px;top:802px">ENGINE SPEED · ${RPM_MIN}–${RPM_MAX} RPM</div>`);
   add(`<div style="position:absolute;left:66px;top:841px;width:300px;height:3px;background:${C.line}"></div>`);
   const fill = add(`<div style="position:absolute;left:66px;top:841px;height:3px;background:${C.accent}"></div>`);
-  const knob = add(`<div style="position:absolute;top:832px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:#fff;border:2px solid ${C.ink}"></div>`);
+  const knob = add(`<div style="position:absolute;top:832px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:${C.paper};border:2px solid ${C.ink}"></div>`);
   const knobAt = (k) => [66 + 300 * Math.min(1, Math.max(0, k)), 842];
 
   const centre = (n) => [parseFloat(n.style.left) + parseFloat(n.style.width) / 2, parseFloat(n.style.top) + 15];
@@ -93,12 +94,12 @@ export function createConsole(app, {title = '__TITLE__'} = {}) {
   const leadDot = svg.querySelector('circle');
   const call = add(`<div class="call"><b>Piston</b><span>Driven by the crank through the rod</span></div>`);
 
-  const cur = add(`<svg class="cur" width="22" height="26" viewBox="0 0 22 26"><path d="M2 2 L2 21 L7 16 L11 24 L14 23 L10 15 L17 15 Z" fill="#fff" stroke="${C.ink}" stroke-width="1.6" stroke-linejoin="round"/></svg>`);
+  const cur = add(`<svg class="cur" width="22" height="26" viewBox="0 0 22 26"><path d="M2 2 L2 21 L7 16 L11 24 L14 23 L10 15 L17 15 Z" fill="#f2f3f5" stroke="#0d0f12" stroke-width="1.6" stroke-linejoin="round"/></svg>`);
   const ring = add(`<div class="ring"></div>`);
 
   const paint = (n, on) => {
-    n.style.background = on ? C.ink : '#fff';
-    n.style.color = on ? '#fff' : C.ink;
+    n.style.background = on ? C.ink : C.paper;
+    n.style.color = on ? C.paper : C.ink;
     n.style.borderColor = on ? C.ink : C.line;
   };
   // s: {deg, travel, speed, rpm, cam, cut, paused, callout: {at: [x, y] | null, label: [x, y], o}, cursor}

@@ -21,14 +21,14 @@ const TIERS = [
 ];
 
 const CSS = `
-html,body{background:#eceef0;overflow:hidden}
+html,body{background:#0f1115;overflow:hidden}
 #app{position:absolute!important;inset:auto!important;left:0;top:0;width:${W}px;height:${H}px;transform-origin:0 0}
 #gl{touch-action:none;cursor:grab;width:${W}px!important;height:${H}px!important}
 #gl.drag{cursor:grabbing}
 .tb,.hit{pointer-events:auto;cursor:pointer}
 .hit.ew{position:absolute;cursor:ew-resize}
-.tourchip{position:absolute;left:800px;top:40px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;height:26px;padding:0 14px;border:1px solid #e1e3e6;background:rgba(255,255,255,.95);font:600 11px Inter,sans-serif;letter-spacing:1.3px;white-space:nowrap;cursor:pointer;pointer-events:auto}
-.tourchip i{display:block;width:7px;height:7px;border-radius:50%;background:#d6182b}
+.tourchip{position:absolute;left:800px;top:40px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;height:26px;padding:0 14px;border:1px solid #2b3037;background:rgba(21,24,29,.92);color:#e7e9ec;font:600 11px Inter,sans-serif;letter-spacing:1.3px;white-space:nowrap;cursor:pointer;pointer-events:auto}
+.tourchip i{display:block;width:7px;height:7px;border-radius:50%;background:#ff3d55}
 .tourchip.on i{animation:blink 1.2s steps(2) infinite}
 @keyframes blink{50%{opacity:.15}}
 `;

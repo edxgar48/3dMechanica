@@ -9,7 +9,7 @@ import {createStage} from './stage.js';
 
 export const SCRIPT = TIMELINE.script;
 export const DURATION = TIMELINE.duration;
-export const DEFAULTS = {duration: DURATION, fps: 60, theme: 'light', hud: {enabled: false, title: '__TITLE__', subtitle: ''}, director: {enabled: false}, watermark: ''};
+export const DEFAULTS = {duration: DURATION, fps: 60, theme: 'dark', hud: {enabled: false, title: '__TITLE__', subtitle: ''}, director: {enabled: false}, watermark: ''};
 export const PLAY = 20; // playback divider: the machine turns at 1/20 of its real speed on screen
 const D2R = Math.PI / 180;
 const mm = (v) => v * 0.001;

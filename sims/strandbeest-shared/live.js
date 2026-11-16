@@ -23,15 +23,15 @@ const ss = (a, b, t) => smoother((t - a) / (b - a));
 const wrapDeg = (d) => ((((d + 180) % 360) + 360) % 360) - 180;
 
 const CSS = (top) => `
-html,body{background:#e9e2d6;overflow:hidden}
+html,body{background:#16140f;overflow:hidden}
 #app{position:absolute!important;inset:auto!important;left:0;top:0;width:${W}px;height:${H}px;transform-origin:0 0}
 #gl{touch-action:none;cursor:grab}
 #gl.drag{cursor:grabbing}
 .vb{pointer-events:auto;cursor:pointer}
 .vb:hover{filter:brightness(.94)}
 .windhit{position:absolute;pointer-events:auto;cursor:ew-resize}
-.tourchip{position:absolute;left:800px;top:48px;transform:translateX(-50%);display:flex;align-items:center;gap:7px;height:21px;padding:0 11px;border:1px solid rgba(110,98,78,.55);background:rgba(243,238,227,.92);color:#3a342b;font:700 8.5px Inter,sans-serif;letter-spacing:1.4px;white-space:nowrap;cursor:pointer;pointer-events:auto}
-.tourchip i{display:block;width:6px;height:6px;border-radius:50%;background:#d0592a}
+.tourchip{position:absolute;left:800px;top:48px;transform:translateX(-50%);display:flex;align-items:center;gap:7px;height:21px;padding:0 11px;border:1px solid rgba(190,175,150,.35);background:rgba(24,21,17,.92);color:#e6ddcd;font:700 8.5px Inter,sans-serif;letter-spacing:1.4px;white-space:nowrap;cursor:pointer;pointer-events:auto}
+.tourchip i{display:block;width:6px;height:6px;border-radius:50%;background:#ff7a3a}
 .tourchip.on i{animation:blink 1.2s steps(2) infinite}
 @keyframes blink{50%{opacity:.15}}
 .turn{position:fixed;left:0;right:0;bottom:18px;text-align:center;font:600 12px/1.4 'JetBrains Mono',monospace;letter-spacing:1px;color:#8a7f6c;text-transform:uppercase;display:none}
@@ -48,7 +48,7 @@ export function runLive() {
   canvas.id = 'gl';
   app.appendChild(canvas);
 
-  const st = createBeestStage({canvas, palette: 'dune', ink: 0.7});
+  const st = createBeestStage({canvas, palette: 'night', ink: 0.7});
   st.usePrintRing(640);
   const ui = createConsole(app);
   const tourCursorAt = makeCursor(ui);

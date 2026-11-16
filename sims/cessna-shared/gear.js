@@ -168,8 +168,8 @@ export function buildGear() {
   const M = {
     white: new THREE.MeshPhysicalMaterial({color: '#f1efea', roughness: 0.35, metalness: 0, clearcoat: 0.35, clearcoatRoughness: 0.35}),
     orange: new THREE.MeshPhysicalMaterial({color: '#e8572a', roughness: 0.32, metalness: 0.05, clearcoat: 0.5, clearcoatRoughness: 0.25}),
-    black: new THREE.MeshPhysicalMaterial({color: '#17181b', roughness: 0.35, metalness: 0.2, clearcoat: 0.5}),
-    rubber: new THREE.MeshStandardMaterial({color: '#1b1c1e', roughness: 0.82, metalness: 0}),
+    black: new THREE.MeshPhysicalMaterial({color: '#4a4f57', roughness: 0.35, metalness: 0.2, clearcoat: 0.5}),
+    rubber: new THREE.MeshStandardMaterial({color: '#34363b', roughness: 0.82, metalness: 0}),
     steel: new THREE.MeshStandardMaterial({color: '#c9ccd1', roughness: 0.22, metalness: 1}),
     brass: new THREE.MeshStandardMaterial({color: '#b28a3e', roughness: 0.3, metalness: 0.9}),
     hub: new THREE.MeshStandardMaterial({color: '#b8bcc2', roughness: 0.3, metalness: 0.8}),

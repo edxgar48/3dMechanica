@@ -13,6 +13,24 @@ import {FOOT_MIN} from './jansen.js';
 
 const V3 = THREE.Vector3;
 export const PALETTES = {
+  // the dark theme: a dune at night under a deep sky; the white frame and a warm hero leg stand off the dark ground
+  night: {
+    bg: '#16140f',
+    sky: ['#0b0f16', '#1d1a15'],
+    sand: '#2c261e',
+    tube: '#f2efe9',
+    joint: '#ff4a3a',
+    steel: '#858a92',
+    foot: '#9a958d',
+    sail: '#ebe8e2',
+    shadow: ['#000000', 0.55],
+    env: {bg: '#8a847b', ground: '#2c261e', k: 0.85},
+    hemi: ['#e8ecf2', '#2c261e', 0.7],
+    hero: '#ffb45c',
+    trace: '#ff7a3a',
+    print: '#0e0c09',
+    grain: '#c9a978',
+  },
   sand: {
     bg: '#eee7dc',
     sand: '#ebe2d3',
