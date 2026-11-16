@@ -51,6 +51,19 @@ const kitPlugin = {
   },
 };
 
+// three.js always comes from the skill's own packages. A machine folder that sits inside another project with its
+// own node_modules would otherwise find that project's three first, while the kit finds the skill's: two copies in
+// one page, 300 KB heavier, and objects from one copy that the other does not recognise.
+const depsPlugin = {
+  name: '3dmechanica-deps',
+  setup(b) {
+    b.onResolve({filter: /^three(\/|$)/}, (args) => {
+      if (args.pluginData?.fromDeps) return undefined;
+      return b.resolve(args.path, {kind: args.kind, resolveDir: path.dirname(DEPS), pluginData: {fromDeps: true}});
+    });
+  },
+};
+
 for (const arg of names) {
   const dir = fs.existsSync(path.join(HERE, arg, 'main.js')) ? path.join(HERE, arg) : path.resolve(arg);
   if (!fs.existsSync(path.join(dir, 'main.js'))) {
@@ -95,7 +108,7 @@ for (const arg of names) {
       ]
     : [];
   const res = await esbuild.build({
-    plugins: [kitPlugin, ...plugins],
+    plugins: [kitPlugin, depsPlugin, ...plugins],
     entryPoints: [path.join(dir, 'main.js')],
     bundle: true,
     nodePaths: [DEPS],
