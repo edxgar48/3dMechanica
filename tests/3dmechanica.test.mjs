@@ -20,7 +20,7 @@ const SIMS = path.join(ROOT, 'sims');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), '3dmechanica-test-'));
 const OUT = path.join(TMP, 'out');
 const DIST = path.join(OUT, 'dist');
-const EXAMPLES = ['v8', 'cessna', 'strandbeest'];
+const EXAMPLES = ['v8', 'cessna', 'strandbeest', 'gear-pump', 'exo-legs'];
 const MACHINE = 'test-crank';
 
 const run = (cmd, args, opts = {}) => {

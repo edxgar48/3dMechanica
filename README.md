@@ -10,7 +10,7 @@ Ask how something works. Claude builds it as one offline HTML page: the machine 
 |---|---|
 | ![Cessna 337 landing gear folding into the airframe](docs/cessna.gif) | ![Strandbeest walking as the wind rises](docs/strandbeest.gif) |
 
-These are the 3 examples that come with the skill, recorded from their films with `sims/capture.mjs`.
+Three of the 5 examples that come with the skill, recorded from their films with `sims/capture.mjs`. The other two are an external gear pump and a powered hip-knee exoskeleton with an exploded view and a bill of materials.
 
 ## Install
 
@@ -52,13 +52,17 @@ Ask Claude Code in plain words:
 
 > Make a teardown of a hydraulic excavator arm and record a 20-second video of it.
 
-Or open one of the 3 examples first:
+Or open one of the 5 examples first:
 
 ```
 node sims/build.mjs v8-live          # 3dmechanica-out/dist/v8-live.html
 node sims/build.mjs cessna-live
 node sims/build.mjs strandbeest-live
+node sims/build.mjs gear-pump-live
+node sims/build.mjs exo-legs-live
 ```
+
+The exoskeleton is a design study built from published gait data and the specifications of a commercial device, not a certified medical device.
 
 ## What is inside
 
@@ -66,7 +70,7 @@ node sims/build.mjs strandbeest-live
 |---|---|
 | `SKILL.md` | What Claude reads: how a machine is built, the rules that make it look right, the review loop. |
 | `sims/kit/` | Runtime, stage, shader warm-up. |
-| `sims/v8-*`, `sims/cessna-*`, `sims/strandbeest-*` | 3 complete machines. `-shared` is the machine, `-live` the page you drive, `-film` the recorded tour. |
+| `sims/v8-*`, `sims/cessna-*`, `sims/strandbeest-*`, `sims/gear-pump-*`, `sims/exo-legs-*` | 5 complete machines. `-shared` is the machine, `-live` the page you drive, `-film` the recorded tour. |
 | `new-machine.mjs` | Starts a new machine from `templates/machine`: a working slider-crank with every file wired, to replace part by part. |
 | `doctor.mjs` | Checks Node, the packages, Chromium and its GPU, ffmpeg and Python. |
 | `tests/` | `npm test`: every example and a generated machine build, render with the machine in frame, tour and hand over, and their scores follow the timeline. About 3 minutes; the sound and video checks skip without Python or ffmpeg. |
