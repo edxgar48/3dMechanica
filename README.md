@@ -12,10 +12,19 @@ Ask how something works. Claude builds it as one offline HTML page: the machine 
 
 ## Install
 
-Put this folder where Claude Code looks for personal skills, named `3dmechanica`:
+Clone it into the folder where Claude Code looks for personal skills.
 
-- macOS and Linux: `~/.claude/skills/3dmechanica`
-- Windows: `%USERPROFILE%\.claude\skills\3dmechanica`
+macOS and Linux:
+
+```
+git clone https://github.com/edxgar48/3dMechanica.git ~/.claude/skills/3dmechanica
+```
+
+Windows (PowerShell):
+
+```
+git clone https://github.com/edxgar48/3dMechanica.git "$env:USERPROFILE\.claude\skills\3dmechanica"
+```
 
 Then, once, in that folder (the same in bash, cmd and PowerShell):
 
@@ -28,6 +37,8 @@ node doctor.mjs
 `doctor.mjs` checks everything below and says how to fix what is missing.
 
 You need Node.js 20 or newer. For the video you also need `ffmpeg`, and for the sound Python 3.
+
+To update later, run `git pull` in that folder, then `npm install` again.
 
 ## Use
 
