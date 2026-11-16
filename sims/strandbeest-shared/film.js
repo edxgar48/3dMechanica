@@ -4,22 +4,17 @@
 // footprints. Wind drives the crank, the crank drives everything: theta(t) is the integral of the wind's crank speed.
 // A pure function of t.
 import {runSim} from '../kit/runtime.js';
+import TIMELINE from '../strandbeest-film/timeline.json';
 import {CFG, legAt, legZ, phaseOf, S, STRIDE} from './beast.js';
 import {createConsole, LABELS, VIEW_KEYS} from './console.js';
 import {footLift} from './jansen.js';
 import {createBeestStage} from './stage.js';
 
 // the foot traces are off in this cut (no trace events); the console keeps the TRACE FEET button for the live page
-export const SCRIPT = [
-  {t: 0, view: 'cine'},
-  {t: 3.4, iso: 1, view: 'leg'},
-  {t: 9.6, iso: 0, view: 'front'},
-  {t: 13.0, wind: [6, 12.5, 1.6]},
-  {t: 16.8, view: 'side'},
-  {t: 21.0, view: 'top'},
-  {t: 25.8, view: 'cine'},
-];
-export const DURATION = 30.7;
+// The operator's moves live in ../strandbeest-film/timeline.json, the one source the film, the live tour, the score and the
+// review sheets all read: change a time there and everything follows.
+export const SCRIPT = TIMELINE.script;
+export const DURATION = TIMELINE.duration;
 export const DEFAULTS = {duration: DURATION, fps: 60, theme: 'light', hud: {enabled: false, title: 'beestsim', subtitle: ''}, director: {enabled: false}, watermark: ''};
 export const HERO = {st: 0, side: 0};
 const D2R = Math.PI / 180;
@@ -89,8 +84,8 @@ export const traceState = (t) => ({
   on: t >= TRACE_ON && t < TRACE_OFF + 0.2 ? 1 : 0,
 });
 export const ISO_T = SCRIPT.find((e) => e.iso === 1).t;
-// the hero's letters come up one by one, starting 0.9 s after the leg is isolated
-export const labelTimes = (start) => LABELS.map((_, i) => start + 0.9 + i * 0.3);
+// the hero's letters come up one by one after the leg is isolated, at the cadence in timeline.json (labels.after, .every)
+export const labelTimes = (start) => LABELS.map((_, i) => start + TIMELINE.labels.after + i * TIMELINE.labels.every);
 
 // ------------------------------------------------------------ views
 const heroZ = legZ(HERO.st, HERO.side) * S;

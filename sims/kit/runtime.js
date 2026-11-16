@@ -11,12 +11,12 @@ export const BASE = {
   accent: '#f2b632',
   watermark: '',
   hud: {
-    title: 'AGENT MESH',
-    subtitle: '/ SIMULATION',
-    right: 'VISUAL SIMULATION',
-    host: 'agent@local',
-    path: '~/session-01',
-    sideTitle: 'LOCAL VIEW',
+    title: '3DMECHANICA',
+    subtitle: '/ SIMULATOR',
+    right: 'INTERACTIVE 3D',
+    host: '3dmechanica',
+    path: '~/machine',
+    sideTitle: 'DETAIL',
     logRows: 5,
     views: 10,
   },
@@ -157,7 +157,7 @@ export async function runSim(defaults, setup) {
   const loop = (now) => {
     if (!paused) cur = Math.max(0, (now - start) / 1000) % cfg.duration;
     draw(cur);
-    // the site page swaps its poster for the canvas on this
+    // 'simframe' fires once, on the first frame drawn: a page embedding this one can swap its poster for the canvas then
     if (!window.SIM_SHOWN) {
       window.SIM_SHOWN = true;
       dispatchEvent(new Event('simframe'));

@@ -3,25 +3,25 @@
 // every frame in headless Chromium, screenshots, pipes to ffmpeg, then muxes
 // a music track if given.
 //
-//   node sims/capture.mjs <name> [--config post.json] [--out teardown-out/x.mp4]
-//        [--size 1080x1350] [--dpr 1.3333] [--fps 60] [--from 0] [--to <duration>]
-//        (--size is the layout in CSS px; --dpr multiplies the output: 1080x1350
-//         at the default 4/3 gives a 1440x1800 video. Default 60 fps, crf 16.)
+//   node sims/capture.mjs <name> [--config post.json] [--out 3dmechanica-out/x.mp4]
+//        [--size 1600x900] [--dpr 1.2] [--fps 60] [--from 0] [--to <duration>]
+//        (--size is the layout in CSS px, the machines' 1600 x 900 by default; --dpr multiplies the output: the
+//         default 1.2 gives a 1920 x 1080 video. Default 60 fps, crf 16.)
 //        [--music music/track.mp3 [--music-start auto|SEC] [--no-sync] [--lufs -21]] [--crf 21]
 //        [--still 12.5]   (--still: one PNG, no video)
 //        [--stills 0,4,9,14 --cols 3]               (tiled review sheet, every tile labelled t=)
 //        [--stills beats [--timeline f.json]]       (one tile per timeline beat, +0.3 s so motion settles)
 //        [--stills every:0.2 --from 3 --to 5]       (scrub a transition)
 //
-//   <name> is a sim built into teardown-out/dist, or a path to any .html
-//   that exposes window.seek(seconds) and freezes its clock on ?render
-//   (motion-effects, vox-explainer, milestone-reveal, model-showdown). An .html
-//   needs --to <seconds> unless it sets window.DURATION.
+//   <name> is a film built into 3dmechanica-out/dist (a -film page: it exposes window.SIM.render(t); a -live page runs
+//   on its own clock and cannot be captured), or a path to any other .html that exposes window.seek(seconds) and
+//   freezes its clock on ?render. Such an .html needs --to <seconds> unless it sets window.DURATION.
 import {spawn} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {CHROMIUM, CHROMIUM_ARGS, DIST, FFMPEG, OUT, PYTHON, playwright} from '../paths.mjs';
+import {beatTimes} from '../timeline.mjs';
 
 const {chromium} = playwright();
 
@@ -43,7 +43,7 @@ if (!fs.existsSync(html)) {
   console.error(SEEK ? `missing ${html}` : `missing ${html}; run node sims/build.mjs ${name}`);
   process.exit(1);
 }
-const [W, H] = opt('size', '1080x1350').split('x').map(Number);
+const [W, H] = opt('size', '1600x900').split('x').map(Number);
 const config = opt('config') ? JSON.parse(fs.readFileSync(opt('config'), 'utf8')) : {};
 // --music <file> [--music-start auto|SECONDS]: analyse the track (sims/beats.py),
 // cut the window so the drop lands ~40% in, and give the beat map to the director.
@@ -72,7 +72,7 @@ const browser = await chromium.launch({
   executablePath: exe,
   args: CHROMIUM_ARGS,
 });
-const dpr = Number(opt('dpr', 4 / 3));
+const dpr = Number(opt('dpr', 1.2));
 const page = await browser.newPage({viewport: {width: W, height: H}, deviceScaleFactor: dpr});
 page.on('console', (m) => m.type() === 'error' && console.error('[page]', m.text()));
 page.on('pageerror', (e) => console.error('[page error]', e.message));
@@ -105,20 +105,18 @@ if (!Number.isFinite(end)) {
   process.exit(1);
 }
 
-// --stills: a list, `beats` (every number in the timeline, +0.3 s), or `every:<step>`.
+// --stills: a list, `beats` (every beat of the timeline, +0.3 s), or `every:<step>`.
 const stillTimes = (arg) => {
   if (arg === 'beats') {
-    const file = opt('timeline', path.join(HERE, name, 'timeline.json'));
+    // the copy build.mjs put next to the page, else the example's own folder
+    const built = path.join(path.dirname(html), `${label}.timeline.json`);
+    const file = path.resolve(opt('timeline', fs.existsSync(built) ? built : path.join(HERE, label, 'timeline.json')));
+    if (!fs.existsSync(file)) {
+      console.error(`no timeline at ${file}; pass --timeline <file.json>`);
+      process.exit(1);
+    }
     const tl = JSON.parse(fs.readFileSync(file, 'utf8'));
-    const ts = [];
-    const walk = (v, key) => {
-      if (key === 'fps' || key === 'duration') return;
-      if (typeof v === 'number') ts.push(v + 0.3);
-      else if (Array.isArray(v)) v.forEach((x) => walk(x));
-      else if (v && typeof v === 'object') Object.entries(v).forEach(([k, x]) => walk(x, k));
-    };
-    walk(tl);
-    return [0, ...ts];
+    return [0, ...beatTimes(tl).map((t) => t + 0.3)];
   }
   if (arg.startsWith('every:')) {
     const step = Number(arg.slice(6));

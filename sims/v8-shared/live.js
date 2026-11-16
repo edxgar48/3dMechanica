@@ -357,7 +357,7 @@ export function runLive() {
       tourChip.classList.toggle('on', AP.on);
       tourChip.innerHTML = AP.on ? '<i></i>AUTO TOUR · CLICK TO TAKE OVER' : '▶ RESUME TOUR';
     }
-    // the site page swaps its poster for the canvas on this
+    // 'simframe' fires once, on the first frame drawn: a page embedding this one can swap its poster for the canvas then
     if (!window.SIM_SHOWN) {
       window.SIM_SHOWN = true;
       dispatchEvent(new Event('simframe'));

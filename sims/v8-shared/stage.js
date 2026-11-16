@@ -13,8 +13,8 @@ export const BG = {top: '#f3f3f4', mid: '#e9eaec', low: '#e3e4e6'};
 
 // look (every field optional, the film's stage when absent): ao, the GTAO blend (0.75); shadow, 'soft' (VSM, a wide
 // blur) or 'hard' (PCF, a crisp edge); studio, 'full' (four soft boxes) or 'plain' (the top box alone, a flatter read
-// on the gloss); engine, the options for buildEngine. The A/B film's version B is the one caller that sets them.
-// lo: the teardown A/B's version B, cheaper all at once: no environment, no AO, no MSAA, basic hard-edged shadows and
+// on the gloss); engine, the options for buildEngine. The examples leave them unset; they are there for a lighter build.
+// lo: the cheapest stage all at once: no environment, no AO, no MSAA, basic hard-edged shadows and
 // a brighter sky light so the flat-shaded parts still read. engine.caps asks for a stencil buffer for the section caps.
 export function createV8Stage({canvas, look = {}}) {
   const lo = !!look.lo;

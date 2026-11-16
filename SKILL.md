@@ -1,25 +1,28 @@
 ---
-name: teardown
+name: 3dmechanica
 description: Build an interactive 3D simulator of a real machine or mechanism (an engine, a landing gear, a walking linkage, a pump, a gearbox) as one offline HTML page people can take apart, with live panels driven by the same model that moves the parts, a button for every subsystem, cutaways, camera views and an auto tour that hands control to the visitor; then record it frame by frame to a 60 fps video with a synced procedural score. Use when someone asks how a machine works, wants a "visual explainer", a "simulator", a "cutaway", an "exploded view" or an "interactive 3D lesson", or wants a 3D object shown working rather than described.
 ---
 
-# Teardown
+# 3DMechanica
 
 One machine, one page. The visitor sees the thing run, presses a button, and the part doing the work opens up while the gauges around it read the real numbers. Left alone, the page tours itself with a cursor. The same code records a film of the tour, frame by frame, with a score built on the same timeline.
 
-`SKILL_DIR` below is the folder this file lives in. Builds and renders go to `./teardown-out` of the folder you run from.
+`$SKILL_DIR` below stands for the absolute path of the folder this file lives in: write that path into each command, in quotes. Every command is a single program call, so it runs as written in bash, zsh, cmd and PowerShell. `python` is `python3` on macOS and Linux. Builds and renders go to `./3dmechanica-out` of the folder you run from.
 
 ## First run
 
 ```
-cd "$SKILL_DIR" && npm install && npx playwright install chromium
+npm install --prefix "$SKILL_DIR"
+node "$SKILL_DIR/node_modules/playwright/cli.js" install chromium
 ```
 
 The pages need nothing else. The video needs `ffmpeg` on PATH and the score needs Python 3 (standard library only). Set `FFMPEG`, `PYTHON` or `CHROMIUM` to point at other binaries.
 
+Then, and whenever a build or a capture fails for a reason outside the code, run `node "$SKILL_DIR/doctor.mjs"`. It checks Node, the packages, Chromium and the GPU it gets (a software renderer makes captures crawl), ffmpeg and Python, and says how to fix each. A FAIL line blocks the pages; a warn line only blocks video or sound, so say which output is missing instead of stopping.
+
 ## The 3 examples
 
-Build one, open the HTML, press buttons. Copy the closest one when you start a new machine.
+Build one, open the HTML, press buttons. Read the closest one when you start a new machine; start the machine itself from `new-machine.mjs` (below).
 
 | | The machine | What drives it | Worth stealing |
 |---|---|---|---|
@@ -30,7 +33,7 @@ Build one, open the HTML, press buttons. Copy the closest one when you start a n
 Each comes in 3 folders: `<name>-shared/` holds the machine, `<name>-film/` the recorded tour, `<name>-live/` the page you drive.
 
 ```
-node "$SKILL_DIR/sims/build.mjs" v8-live          # → teardown-out/dist/v8-live.html, offline, ~800 KB
+node "$SKILL_DIR/sims/build.mjs" v8-live          # → 3dmechanica-out/dist/v8-live.html, offline, ~800 KB
 node "$SKILL_DIR/sims/build.mjs"                  # all 6
 ```
 
@@ -48,7 +51,18 @@ One folder per machine, split by job. The examples follow this exactly:
 | `live.js` | The same machine in real time: buttons, sliders, orbit, zoom, keys. With no input it plays `film.js`'s script as an auto tour with a cursor; any click, drag, wheel or key hands control over, 25 s of quiet hands it back. |
 | `score.py` | The sound on the film's timeline. |
 
-For a machine outside `SKILL_DIR`, make a folder with a `main.js` and import the kit by name: `import {runSim} from 'teardown-kit/runtime.js'`. Build it with `node "$SKILL_DIR/sims/build.mjs" ./my-machine`.
+## Starting a new machine
+
+```
+node "$SKILL_DIR/new-machine.mjs" gear-pump --title "Gear Pump"     # → ./gear-pump-shared, -film, -live
+node "$SKILL_DIR/sims/build.mjs" ./gear-pump-live ./gear-pump-film
+```
+
+This writes a complete, small machine in the current folder (`--dir` for another): a single-cylinder slider-crank with the exact kinematics, every file in the table above (`machine.js` is the geometry), a timeline, an auto tour and a score. It builds, captures and scores as it is, so you start from something that works and change one file at a time: `kin.js` first (the real numbers and the math for your mechanism), then `machine.js`, `console.js`, the timeline, `score.py`. Keep the wiring: one input, one timeline, every readout from the function that poses the parts. When your machine is close to one of the 3 examples, read that example for the harder parts (cutaways with section caps, instanced links, a flight model) and borrow from it.
+
+When you change the skill itself (the kit, `build.mjs`, `capture.mjs`, `sfx/`, an example or the template), run `npm --prefix "$SKILL_DIR" test` before saying it works.
+
+Outside `SKILL_DIR` the kit is imported by name (`import {runSim} from '3dmechanica-kit/runtime.js'`), and a build copies the film's timeline next to the page, so `--stills beats` finds it without `--timeline`.
 
 ## Rules that decide whether it works
 
@@ -81,19 +95,19 @@ runSim(DEFAULTS, async ({cfg, canvas, capture}) => {
 
 - `render(t)` is pure: no `Math.random` (use `rng(seed)` from `kit/util.js` at setup), no `Date`, no state carried between frames. Capture calls it at arbitrary times.
 - Anything that moves by its own rules (agents, particles) is simulated once at load into typed arrays; `render` only reads them. A quantity integrated over time (the Strandbeest's crank under a changing wind) is integrated in closed form or tabulated at load.
-- Every beat goes into `<name>-film/timeline.json` in seconds. The score reads the same file.
+- Every beat goes into `<name>-film/timeline.json` in seconds, and nowhere else. The operator's moves are its `script`, each a time plus what it does: `{"duration": 26, "script": [{"t": 0, "cam": "open"}, {"t": 12.1, "rpm": [700, 2400, 1.4]}, ...]}`. `film.js` imports it (`import TIMELINE from '../<name>-film/timeline.json'`, `SCRIPT = TIMELINE.script`), the live tour plays that SCRIPT, the score picks its accents from it with `moves(tl, "cam", after=0)`, and `--stills beats`, `sheet.mjs` and `wave.mjs` draw a beat at every `t`. Any other timing a sound needs (a label cadence) goes in the same file. Move a beat there and everything follows.
 - Frame 0 is the thumbnail. It must already show the machine.
 
 ## Commands
 
 ```
 node "$SKILL_DIR/sims/build.mjs" v8-film
-node "$SKILL_DIR/sims/capture.mjs" v8-film --size 1600x900 --dpr 1.2 --stills beats --cols 4 --out teardown-out/v8-beats.png
-node "$SKILL_DIR/sims/capture.mjs" v8-film --size 1600x900 --dpr 1.2 --still 12.5 --out teardown-out/v8-12.5.png
-node "$SKILL_DIR/sims/capture.mjs" v8-film --size 1600x900 --dpr 1.2 --out teardown-out/v8-silent.mp4
+node "$SKILL_DIR/sims/capture.mjs" v8-film --size 1600x900 --dpr 1.2 --stills beats --cols 4 --out 3dmechanica-out/v8-beats.png
+node "$SKILL_DIR/sims/capture.mjs" v8-film --size 1600x900 --dpr 1.2 --still 12.5 --out 3dmechanica-out/v8-12.5.png
+node "$SKILL_DIR/sims/capture.mjs" v8-film --size 1600x900 --dpr 1.2 --out 3dmechanica-out/v8-silent.mp4
 python "$SKILL_DIR/run_sfx.py" "$SKILL_DIR/sims/v8-shared/score.py"
-ffmpeg -y -i teardown-out/v8-silent.mp4 -i teardown-out/v8-score.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 256k -shortest -movflags +faststart teardown-out/v8.mp4
-node "$SKILL_DIR/wave.mjs" teardown-out/v8.mp4 --timeline "$SKILL_DIR/sims/v8-film/timeline.json"
+ffmpeg -y -i 3dmechanica-out/v8-silent.mp4 -i 3dmechanica-out/v8-score.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 256k -shortest -movflags +faststart 3dmechanica-out/v8.mp4
+node "$SKILL_DIR/wave.mjs" 3dmechanica-out/v8.mp4 --timeline "$SKILL_DIR/sims/v8-film/timeline.json"
 ```
 
 `--size` is the CSS layout and `--dpr` multiplies it: 1600 x 900 at 1.2 gives 1920 x 1080. Capture prints the GPU it got; a software renderer means the GPU flags in `paths.mjs` did not take.
@@ -128,7 +142,7 @@ Checklist:
 
 `sfx/` synthesises every sound in pure Python (48 kHz, reproducible) and reads the film's timeline, so sound cannot drift out of sync. `python "$SKILL_DIR/run_sfx.py" --list` shows the generators. `sample()` adds the recorded CC0 sounds in `sfx/samples/`. `sfx/score_kit.py` has the beds and accents the 3 scores use: a chord bed, a soft thud per power stroke, a motor, air under a drag.
 
-- Every time comes from the timeline, never a typed number.
+- Every time comes from the timeline, never a typed number: `score(mix, tl)` reads `tl["script"]` through `moves(tl, *keys, after=None)` from `score_kit`. A model the film integrates (the crank under the throttle or the wind) is mirrored in Python, but its event comes from the script.
 - Mastering is automatic: −14 LUFS, true peak ≤ −2 dBFS.
 - Accent, never narrate: continuous motion stays silent. One key for every tonal sound.
 
@@ -141,4 +155,4 @@ Checklist:
 
 ## Credits
 
-The kit, frame capture, sfx engine and review rules come from [whaleyxbt/claude-motion](https://github.com/whaleyxbt/claude-motion) (MIT). The recorded samples are CC0 from Freesound, trimmed by [Barty-Bart/motion-graphics](https://github.com/Barty-Bart/motion-graphics) (MIT); sources in `sfx/samples/SOURCES.md`.
+3DMechanica is based on [elvarofficial/teardown](https://github.com/elvarofficial/teardown) (MIT). The kit, frame capture, sfx engine and review rules come from [whaleyxbt/claude-motion](https://github.com/whaleyxbt/claude-motion) (MIT). The recorded samples are CC0 from Freesound, trimmed by [Barty-Bart/motion-graphics](https://github.com/Barty-Bart/motion-graphics) (MIT); sources in `sfx/samples/SOURCES.md`.

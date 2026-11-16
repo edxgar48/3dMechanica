@@ -32,7 +32,7 @@ def main():
     ap = argparse.ArgumentParser(prog="python run_sfx.py", description="Render a cue sheet to a mastered WAV.")
     ap.add_argument("cues", nargs="?", help="cue sheet: a .py file with score(mix, tl)")
     ap.add_argument("--timeline", help="timeline JSON (default: the cue sheet's TIMELINE, else timeline.json)")
-    ap.add_argument("--out", help="output WAV (default: the cue sheet's OUT, else teardown-out/<cue>.wav, or $TEARDOWN_OUT)")
+    ap.add_argument("--out", help="output WAV (default: the cue sheet's OUT, else 3dmechanica-out/<cue>.wav, or $MECHANICA3D_OUT)")
     ap.add_argument("--list", action="store_true", help="list sound generators and exit")
     args = ap.parse_args()
 
@@ -46,7 +46,7 @@ def main():
     # A relative TIMELINE in the cue sheet is read next to the cue sheet, so it runs from any folder.
     timeline = args.timeline or os.path.join(os.path.dirname(os.path.abspath(args.cues)), getattr(cues, "TIMELINE", "timeline.json"))
     stem = os.path.splitext(os.path.basename(args.cues))[0]
-    out = args.out or getattr(cues, "OUT", os.path.join(os.environ.get("TEARDOWN_OUT", "teardown-out"), f"{stem}.wav"))
+    out = args.out or getattr(cues, "OUT", os.path.join(os.environ.get("MECHANICA3D_OUT", "3dmechanica-out"), f"{stem}.wav"))
     with open(timeline, encoding="utf8") as f:
         tl = json.load(f)
 

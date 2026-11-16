@@ -1,4 +1,4 @@
-# teardown
+# 3DMechanica
 
 A Claude Code skill that turns any machine into a 3D simulator you can take apart.
 
@@ -12,15 +12,20 @@ Ask how something works. Claude builds it as one offline HTML page: the machine 
 
 ## Install
 
+Put this folder where Claude Code looks for personal skills, named `3dmechanica`:
+
+- macOS and Linux: `~/.claude/skills/3dmechanica`
+- Windows: `%USERPROFILE%\.claude\skills\3dmechanica`
+
+Then, once, in that folder (the same in bash, cmd and PowerShell):
+
 ```
-npx skills add elvarofficial/teardown -g -a claude-code
+npm install
+npx playwright install chromium
+node doctor.mjs
 ```
 
-Then, once, in the installed folder:
-
-```
-npm install && npx playwright install chromium
-```
+`doctor.mjs` checks everything below and says how to fix what is missing.
 
 You need Node.js 20 or newer. For the video you also need `ffmpeg`, and for the sound Python 3.
 
@@ -37,7 +42,7 @@ Ask Claude Code in plain words:
 Or open one of the 3 examples first:
 
 ```
-node sims/build.mjs v8-live          # teardown-out/dist/v8-live.html
+node sims/build.mjs v8-live          # 3dmechanica-out/dist/v8-live.html
 node sims/build.mjs cessna-live
 node sims/build.mjs strandbeest-live
 ```
@@ -49,12 +54,15 @@ node sims/build.mjs strandbeest-live
 | `SKILL.md` | What Claude reads: how a machine is built, the rules that make it look right, the review loop. |
 | `sims/kit/` | Runtime, stage, shader warm-up. |
 | `sims/v8-*`, `sims/cessna-*`, `sims/strandbeest-*` | 3 complete machines. `-shared` is the machine, `-live` the page you drive, `-film` the recorded tour. |
+| `new-machine.mjs` | Starts a new machine from `templates/machine`: a working slider-crank with every file wired, to replace part by part. |
+| `doctor.mjs` | Checks Node, the packages, Chromium and its GPU, ffmpeg and Python. |
+| `tests/` | `npm test`: every example and a generated machine build, render with the machine in frame, tour and hand over, and their scores follow the timeline. About 3 minutes; the sound and video checks skip without Python or ffmpeg. |
 | `sims/build.mjs` | Bundles a machine into one HTML file, three.js and fonts inlined. |
 | `sims/capture.mjs` | Renders the film frame by frame to a 60 fps mp4, or to review sheets of stills. |
 | `sfx/`, `run_sfx.py` | Procedural sound on the film's timeline, mastered to −14 LUFS. |
 
 ## Credits
 
-Built on [whaleyxbt/claude-motion](https://github.com/whaleyxbt/claude-motion) (MIT): the runtime, frame capture, sound engine and review rules come from there. Recorded samples are CC0 from Freesound, prepared by [Barty-Bart/motion-graphics](https://github.com/Barty-Bart/motion-graphics); sources in `sfx/samples/SOURCES.md`.
+Based on [elvarofficial/teardown](https://github.com/elvarofficial/teardown) (MIT). That project is built on [whaleyxbt/claude-motion](https://github.com/whaleyxbt/claude-motion) (MIT): the runtime, frame capture, sound engine and review rules come from there. Recorded samples are CC0 from Freesound, prepared by [Barty-Bart/motion-graphics](https://github.com/Barty-Bart/motion-graphics); sources in `sfx/samples/SOURCES.md`.
 
 MIT licence.

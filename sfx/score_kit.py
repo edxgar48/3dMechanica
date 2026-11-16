@@ -1,6 +1,6 @@
-"""Shared pieces for the figure scores: a parameterised lo-fi bed and a handful of accents.
+"""Shared pieces for the machine scores: a parameterised lo-fi bed and a handful of accents.
 
-A figure's score.py imports this (it sits next to the sfx engine on sys.path when run through
+A machine's score.py imports this (it sits next to the sfx engine on sys.path when run through
 run_sfx.py) and adds its own accents on the tour's seconds.
 """
 
@@ -204,3 +204,10 @@ def spans(tl, field, pred):
 def rising(tl, field, pred):
     """Moments where pred(sampled value) turns true."""
     return [a for a, _ in spans(tl, field, pred)]
+
+
+def moves(tl, *keys, after=None):
+    """The operator's moves from a film timeline ({"script": [{"t": ..., <key>: ...}, ...]}), in order: every move that
+    sets one of keys (all moves when no keys are given), only those later than `after` when it is set. A score takes
+    its accents from these instead of typing the seconds again, so the sound follows any change to the film."""
+    return [e for e in tl.get("script", []) if (not keys or any(k in e for k in keys)) and (after is None or e["t"] > after)]

@@ -12,7 +12,7 @@ export const FFPROBE = process.env.FFPROBE || 'ffprobe';
 export const PYTHON = process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
 
 // three, esbuild, fonts and playwright: `npm install` in this folder puts them here.
-export const DEPS = process.env.TEARDOWN_DEPS || path.join(ROOT, 'node_modules');
+export const DEPS = process.env.MECHANICA3D_DEPS || path.join(ROOT, 'node_modules');
 // Unset: playwright uses the Chromium that `npx playwright install chromium` downloaded.
 export const CHROMIUM = process.env.CHROMIUM || undefined;
 // Real GPU WebGL instead of a software rasteriser. On Windows d3d11 plus --force_high_performance_gpu keeps ANGLE off
@@ -22,8 +22,8 @@ export const CHROMIUM_ARGS = [
   '--force_high_performance_gpu', '--ignore-gpu-blocklist', '--enable-gpu-rasterization', '--enable-webgl', '--hide-scrollbars',
 ];
 
-// Builds and renders land in ./teardown-out of the folder you run from.
-export const OUT = path.resolve(process.env.TEARDOWN_OUT || 'teardown-out');
+// Builds and renders land in ./3dmechanica-out of the folder you run from.
+export const OUT = path.resolve(process.env.MECHANICA3D_OUT || '3dmechanica-out');
 export const DIST = path.join(OUT, 'dist');
 
 export const fromDeps = (id) => createRequire(path.join(DEPS, 'x.js'))(id);

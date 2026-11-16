@@ -111,9 +111,9 @@ function bulkheadGeo(thick, cs = 24) {
   return g;
 }
 
-/** opts.plain: the same engine a notch simpler (the A/B film's version B): gears as toothless discs, each valve's
+/** opts.plain: the same engine a notch simpler (no example sets it; for a lighter build): gears as toothless discs, each valve's
  *  two coil springs as one plain sleeve, no piston rings, no pulley bolts. Absent, the engine is built as before.
- *  opts.lo: the teardown A/B's version B, clearly cheaper: everything plain drops, plus flat-shaded Lambert for every
+ *  opts.lo: clearly cheaper again: everything plain drops, plus flat-shaded Lambert for every
  *  material, opaque liners, a sixth of the segments on every round part, polygon discs for gears, boxes for lobes.
  *  opts.caps: a colour; with a section on, the cut gets a flat face of it wherever it passes through a solid. */
 export function buildEngine(opts = {}) {

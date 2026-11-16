@@ -3,23 +3,16 @@
 // isolates cylinder 1, switches the tracking to cylinder 6 from the firing order, looks down the valley, opens the
 // throttle to 2,400 rpm, then walks the side, front and hero views. A pure function of t.
 import {runSim} from '../kit/runtime.js';
+import TIMELINE from '../v8-film/timeline.json';
 import {CAMS, createConsole, RPM_MAX} from './console.js';
 import {bankXY, CYL, E, ORDER, psi} from './kin.js';
 import {createV8Stage} from './stage.js';
 
 // the film opens on the whole engine, a slow orbit and a gentle push in for 3.5 s, then a beat every 2.5-3 s
-export const SCRIPT = [
-  {t: 0, cam: 'open'},
-  {t: 3.5, cam: 'cyl'},
-  {t: 6.9, track: 6},
-  {t: 9.7, cam: 'valley'},
-  {t: 12.1, rpm: [700, 2400, 1.4]},
-  {t: 14.7, cam: 'side'},
-  {t: 17.3, cam: 'front'},
-  {t: 19.9, cam: 'hero'},
-  {t: 22.5, track: 1},
-];
-export const DURATION = 26;
+// The operator's moves live in ../v8-film/timeline.json, the one source the film, the live tour, the score and the
+// review sheets all read: change a time there and everything follows.
+export const SCRIPT = TIMELINE.script;
+export const DURATION = TIMELINE.duration;
 export const DEFAULTS = {duration: DURATION, fps: 60, theme: 'light', hud: {enabled: false, title: 'v8d', subtitle: ''}, director: {enabled: false}, watermark: ''};
 const D2R = Math.PI / 180;
 const mm = (v) => v * 0.001;

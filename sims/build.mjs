@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 // Bundles every sims/<name>/main.js into one self-contained HTML file:
-// teardown-out/dist/<name>.html (three.js, fonts, CSS inlined). Opens from file://,
+// 3dmechanica-out/dist/<name>.html (three.js, fonts, CSS inlined). Opens from file://,
 // works offline, can be published as-is.
 //
 //   node sims/build.mjs                 every example in sims/
 //   node sims/build.mjs v8-live         one example
 //   node sims/build.mjs ./my-machine    your own sim: any folder with a main.js. Import the kit as
-//                                       'teardown-kit/runtime.js', 'teardown-kit/util.js' and so on.
+//                                       '3dmechanica-kit/runtime.js', '3dmechanica-kit/util.js' and so on.
 //
 // An entry may carry build.json with {"swap": {"heavy.glb": "light.glb"}}: every import of a file named heavy.glb is
-// served from light.glb in the same folder (a site page with lighter models than its film). {"external": {...}} does
+// served from light.glb in the same folder (a live page with lighter models than its film). {"external": {...}} does
 // the same but leaves the model out of the page: the import becomes the string "url:light.glb", the file is copied
-// next to the page and listed in <name>.assets.json (the site build copies those too). The page stays small enough
+// next to the page and listed in <name>.assets.json (copy those along when you publish the page). The page stays small enough
 // for link crawlers (X reads the share card from it). {"files": [...]} copies more files from node_modules next to the
 // page the same way (decoders a loader fetches at runtime).
 import fs from 'node:fs';
@@ -43,11 +43,11 @@ const names = process.argv.slice(2).length
       .readdirSync(HERE)
       .filter((d) => fs.existsSync(path.join(HERE, d, 'main.js')));
 
-// `teardown-kit/x.js` resolves to sims/kit/x.js, so a sim outside this folder can use the kit.
+// `3dmechanica-kit/x.js` resolves to sims/kit/x.js, so a sim outside this folder can use the kit.
 const kitPlugin = {
-  name: 'teardown-kit',
+  name: '3dmechanica-kit',
   setup(b) {
-    b.onResolve({filter: /^teardown-kit\//}, (args) => ({path: path.join(HERE, 'kit', args.path.slice('teardown-kit/'.length))}));
+    b.onResolve({filter: /^3dmechanica-kit\//}, (args) => ({path: path.join(HERE, 'kit', args.path.slice('3dmechanica-kit/'.length))}));
   },
 };
 
@@ -137,5 +137,9 @@ ${js}
     for (const a of assets) fs.copyFileSync(a, path.join(DIST, path.basename(a)));
     fs.writeFileSync(listFile, JSON.stringify(assets.map((a) => path.basename(a))));
   } else if (fs.existsSync(listFile)) fs.rmSync(listFile);
+  // the film's timeline goes next to the page, so `capture --stills beats` finds it for a machine outside sims/ too
+  const tlFile = path.join(DIST, `${name}.timeline.json`);
+  if (fs.existsSync(path.join(dir, 'timeline.json'))) fs.copyFileSync(path.join(dir, 'timeline.json'), tlFile);
+  else if (fs.existsSync(tlFile)) fs.rmSync(tlFile);
   console.log(`${out}  ${(html.length / 1024).toFixed(0)} KB  ${Date.now() - t0} ms`);
 }

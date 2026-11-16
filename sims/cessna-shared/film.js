@@ -3,31 +3,17 @@
 // views and display modes: the airframe ghost, the gearbox close-up with the labels on, the side tube spinning, the
 // front, the x-ray plate, the plan from above, the exploded set, and an orbit for the last landing. A pure function of t.
 import {runSim} from '../kit/runtime.js';
+import TIMELINE from '../cessna-film/timeline.json';
 import {createConsole, DISPLAY} from './console.js';
 import {phaseAt, SEQ, stateAt} from './flight.js';
 import {AXIS, E0, G, J, LEG0} from './gear.js';
 import {createCessnaStage} from './stage.js';
 import * as THREE from 'three';
 
-export const SCRIPT = [
-  {t: 0, seq: 'takeoff', view: 'hero'},
-  {t: 2.4, display: 'fuselage'},
-  {t: 5.4, seq: 'landing'},
-  {t: 5.9, view: 'gearbox'},
-  {t: 6.5, display: 'labels'},
-  {t: 8.7, view: 'sidetube'},
-  {t: 10.9, view: 'front'},
-  {t: 11.5, display: 'xray'},
-  {t: 12.7, display: 'labels'},
-  {t: 13.0, seq: 'takeoff'},
-  {t: 13.4, view: 'plan'},
-  {t: 16.2, display: 'exploded'},
-  {t: 17.8, display: 'exploded'},
-  {t: 18.3, view: 'hero'},
-  {t: 18.7, display: 'orbit'},
-  {t: 19.1, seq: 'landing'},
-];
-export const DURATION = 26.2;
+// The operator's moves live in ../cessna-film/timeline.json, the one source the film, the live tour, the score and the
+// review sheets all read: change a time there and everything follows.
+export const SCRIPT = TIMELINE.script;
+export const DURATION = TIMELINE.duration;
 export const DEFAULTS = {duration: DURATION, fps: 60, theme: 'light', hud: {enabled: false, title: 'cessna', subtitle: ''}, director: {enabled: false}, watermark: ''};
 const D2R = Math.PI / 180;
 const smoother = (x) => {

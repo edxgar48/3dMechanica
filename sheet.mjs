@@ -13,6 +13,7 @@ import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import {FFMPEG, FFPROBE} from './paths.mjs';
+import {beatTimes} from './timeline.mjs';
 
 const argv = process.argv.slice(2);
 const opt = (name, fallback) => {
@@ -49,15 +50,7 @@ const beats = () => {
     process.exit(1);
   }
   const tl = JSON.parse(fs.readFileSync(timelinePath, 'utf8'));
-  const out = [];
-  const walk = (v, key) => {
-    if (key === 'fps' || key === 'duration') return;
-    if (typeof v === 'number') out.push(v);
-    else if (Array.isArray(v)) v.forEach((x) => walk(x));
-    else if (v && typeof v === 'object') Object.entries(v).forEach(([k, x]) => walk(x, k));
-  };
-  walk(tl);
-  return out.map((t) => t + offset);
+  return beatTimes(tl).map((t) => t + offset);
 };
 
 let times;
