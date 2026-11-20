@@ -20,7 +20,7 @@ const SIMS = path.join(ROOT, 'sims');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), '3dmechanica-test-'));
 const OUT = path.join(TMP, 'out');
 const DIST = path.join(OUT, 'dist');
-const EXAMPLES = ['v8', 'cessna', 'strandbeest', 'gear-pump', 'exo-legs'];
+const EXAMPLES = ['v8', 'cessna', 'strandbeest', 'gear-pump', 'exo-legs', 'bldc-stepper'];
 const MACHINE = 'test-crank';
 
 const run = (cmd, args, opts = {}) => {
@@ -134,11 +134,11 @@ describe('pages', () => {
     it(`${name}-live starts its auto tour and hands over on a click`, async () => {
       const {page, errors} = await open(`${name}-live`, {capture: false});
       await page.waitForFunction(() => window.LIVE, null, {timeout: 60000});
-      await page.waitForFunction(() => /AUTO TOUR/i.test(document.querySelector('.tourchip')?.textContent ?? ''), null, {timeout: 15000});
+      await page.waitForFunction(() => /AUTO TOUR|TOUR AUTOM/i.test(document.querySelector('.tourchip')?.textContent ?? ''), null, {timeout: 15000});
       await page.waitForTimeout(1200);
       assert.ok((await coverage(page)) > 0.02, 'the machine is on screen');
       await page.mouse.click(800, 450);
-      await page.waitForFunction(() => /RESUME/i.test(document.querySelector('.tourchip')?.textContent ?? ''), null, {timeout: 5000});
+      await page.waitForFunction(() => /RESUME|RETOMAR/i.test(document.querySelector('.tourchip')?.textContent ?? ''), null, {timeout: 5000});
       assert.deepEqual(errors, []);
       await page.close();
     });

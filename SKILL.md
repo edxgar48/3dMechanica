@@ -20,7 +20,7 @@ The pages need nothing else. The video needs `ffmpeg` on PATH and the score need
 
 Then, and whenever a build or a capture fails for a reason outside the code, run `node "$SKILL_DIR/doctor.mjs"`. It checks Node, the packages, Chromium and the GPU it gets (a software renderer makes captures crawl), ffmpeg and Python, and says how to fix each. A FAIL line blocks the pages; a warn line only blocks video or sound, so say which output is missing instead of stopping.
 
-## The 5 examples
+## The 6 examples
 
 Build one, open the HTML, press buttons. Read the closest one when you start a new machine; start the machine itself from `new-machine.mjs` (below).
 
@@ -31,12 +31,13 @@ Build one, open the HTML, press buttons. Read the closest one when you start a n
 | `strandbeest-*` | Theo Jansen's Strandbeest, 20 legs on one crankshaft, walking broadside over sand. | Wind. The crank speed is integrated from it; every joint follows by circle intersection from Jansen's 11 link lengths. | An exact linkage solver in 67 lines, instanced tubes, foot traces, a contact chart of all 20 feet. |
 | `gear-pump-*` | An external gear pump, 8.19 cm³/rev: two 12-tooth involute gears (module 2.5 mm, 17 mm face) carrying oil from inlet to outlet. | Shaft angle, under speed and outlet-pressure sliders. Displacement, flow ripple, torque and power from the gear geometry. | A true involute tooth outline, oil pockets coloured by where they ride, a cover that slides off, a glass shell. |
 | `exo-legs-*` | A powered hip-knee exoskeleton walking with its user: hip frame, battery, telescopic links, cuffs, four actuators, passive ankles. | Gait phase, from Winter's normative angle and moment curves, under speed and assistance sliders. | A walking chain on a rolling walkway, actuator torque and power, a bill of materials, an exploded view with numbered labels. |
+| `bldc-stepper-*` | A 12N14P gimbal BLDC driven as a stepper on a test stand: an arm and a brass weight on the bell, a dial with the commanded angle, an AS5600 encoder and a FOC driver behind. UI in Portuguese. | Time, through a rotor-and-load simulation integrated once at load: full step, 1/16 microstep or closed-loop FOC, under target, current and load sliders. | Real dynamics in a pure `render(t)` (tabulated), lost steps you can cause, the field-vs-rotor electrical angle, coils lit by their phase current. |
 
 Each comes in 3 folders: `<name>-shared/` holds the machine, `<name>-film/` the recorded tour, `<name>-live/` the page you drive.
 
 ```
 node "$SKILL_DIR/sims/build.mjs" v8-live          # → 3dmechanica-out/dist/v8-live.html, offline, ~800 KB
-node "$SKILL_DIR/sims/build.mjs"                  # all 10
+node "$SKILL_DIR/sims/build.mjs"                  # all 12
 ```
 
 ## How a machine is built
@@ -60,7 +61,7 @@ node "$SKILL_DIR/new-machine.mjs" vane-pump --title "Vane Pump"     # → ./vane
 node "$SKILL_DIR/sims/build.mjs" ./vane-pump-live ./vane-pump-film
 ```
 
-This writes a complete, small machine in the current folder (`--dir` for another): a single-cylinder slider-crank with the exact kinematics, every file in the table above (`machine.js` is the geometry), a timeline, an auto tour and a score. It builds, captures and scores as it is, so you start from something that works and change one file at a time: `kin.js` first (the real numbers and the math for your mechanism), then `machine.js`, `console.js`, the timeline, `score.py`. Keep the wiring: one input, one timeline, every readout from the function that poses the parts. When your machine is close to one of the 5 examples, read that example for the harder parts (cutaways with section caps, instanced links, a flight model, an involute gear, a walking chain, an exploded view) and borrow from it.
+This writes a complete, small machine in the current folder (`--dir` for another): a single-cylinder slider-crank with the exact kinematics, every file in the table above (`machine.js` is the geometry), a timeline, an auto tour and a score. It builds, captures and scores as it is, so you start from something that works and change one file at a time: `kin.js` first (the real numbers and the math for your mechanism), then `machine.js`, `console.js`, the timeline, `score.py`. Keep the wiring: one input, one timeline, every readout from the function that poses the parts. When your machine is close to one of the 6 examples, read that example for the harder parts (cutaways with section caps, instanced links, a flight model, an involute gear, a walking chain, an exploded view) and borrow from it.
 
 When you change the skill itself (the kit, `build.mjs`, `capture.mjs`, `sfx/`, an example or the template), run `npm --prefix "$SKILL_DIR" test` before saying it works.
 
@@ -142,7 +143,7 @@ Checklist:
 
 ## Sound
 
-`sfx/` synthesises every sound in pure Python (48 kHz, reproducible) and reads the film's timeline, so sound cannot drift out of sync. `python "$SKILL_DIR/run_sfx.py" --list` shows the generators. `sample()` adds the recorded CC0 sounds in `sfx/samples/`. `sfx/score_kit.py` has the beds and accents the 5 scores use: a chord bed, a soft thud per power stroke, a motor, air under a drag.
+`sfx/` synthesises every sound in pure Python (48 kHz, reproducible) and reads the film's timeline, so sound cannot drift out of sync. `python "$SKILL_DIR/run_sfx.py" --list` shows the generators. `sample()` adds the recorded CC0 sounds in `sfx/samples/`. `sfx/score_kit.py` has the beds and accents the 6 scores use: a chord bed, a soft thud per power stroke, a motor, air under a drag.
 
 - Every time comes from the timeline, never a typed number: `score(mix, tl)` reads `tl["script"]` through `moves(tl, *keys, after=None)` from `score_kit`. A model the film integrates (the crank under the throttle or the wind) is mirrored in Python, but its event comes from the script.
 - Mastering is automatic: −14 LUFS, true peak ≤ −2 dBFS.
